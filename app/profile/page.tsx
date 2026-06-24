@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { AppShell } from "@/app/components/AppShell";
+import { PageHeader } from "@/app/components/PageHeader";
 import { loadProfile, saveProfile, type UserProfile } from "@/lib/storage/profile-store";
 import { trackEvent } from "@/lib/analytics/events";
 
@@ -23,14 +23,15 @@ export default function ProfilePage() {
 
   return (
     <AppShell activeNav="progress">
-      <section className="page-header pb-3">
-        <Link href="/progress" className="back-link">← 学習記録</Link>
-        <p className="section-label mt-4">MY PROFILE</p>
-        <h1 className="page-title">プロフィール</h1>
-        <p className="page-desc">認定証・修了記録に表示される情報を登録</p>
-      </section>
+      <PageHeader
+        backHref="/progress"
+        backLabel="学習記録"
+        label="MY PROFILE"
+        title="プロフィール"
+        description="認定証・修了記録に表示される情報を登録"
+      />
 
-      <section className="page-section pt-0">
+      <section className="page-section pt-0 pb-8">
         <div className="card-premium p-5">
           <div className="space-y-4">
             {([

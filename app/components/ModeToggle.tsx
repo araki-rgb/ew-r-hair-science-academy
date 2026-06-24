@@ -30,47 +30,39 @@ export function ModeToggle({ className = "" }: { className?: string }) {
   const { mode, setMode, hydrated } = useUserMode();
 
   if (!hydrated) {
-    return (
-      <div className={`flex rounded-2xl bg-primary-muted/60 p-1 ${className}`}>
-        <div className="flex-1 rounded-xl py-2.5" />
-        <div className="flex-1 rounded-xl py-2.5" />
-      </div>
-    );
+    return <div className={`mode-toggle-track ${className}`}><div className="h-10" /></div>;
   }
 
   return (
-    <div
-      className={`flex rounded-2xl bg-primary-muted/60 p-1 ${className}`}
-      role="tablist"
-      aria-label="学習モード"
-    >
+    <div className={`mode-toggle-track ${className}`} role="tablist" aria-label="学習モード">
+      <div
+        className="mode-toggle-thumb"
+        style={{ transform: mode === "dealer" ? "translateX(100%)" : "translateX(0)" }}
+        aria-hidden
+      />
       <button
         type="button"
         role="tab"
         aria-selected={mode === "hairdresser"}
         onClick={() => setMode("hairdresser")}
-        className={`mode-pill flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-[12px] font-semibold ${
-          mode === "hairdresser" ? "active" : "text-muted"
-        }`}
+        className={`mode-toggle-btn ${mode === "hairdresser" ? "active" : ""}`}
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
+        <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5" aria-hidden>
           <path d="M10 2a3 3 0 100 6 3 3 0 000-6zM4 16c0-3.3 2.7-6 6-6s6 2.7 6 6v1H4v-1z" />
         </svg>
-        美容師モード
+        美容師
       </button>
       <button
         type="button"
         role="tab"
         aria-selected={mode === "dealer"}
         onClick={() => setMode("dealer")}
-        className={`mode-pill flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-[12px] font-semibold ${
-          mode === "dealer" ? "active" : "text-muted"
-        }`}
+        className={`mode-toggle-btn ${mode === "dealer" ? "active" : ""}`}
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
+        <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5" aria-hidden>
           <path d="M3 4a1 1 0 011-1h3a1 1 0 011 1v1h6V4a1 1 0 011-1h3a1 1 0 011 1v2H3V4zm0 4h14v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
         </svg>
-        ディーラーモード
+        ディーラー
       </button>
     </div>
   );

@@ -54,36 +54,30 @@ export function QuizEngine({ questions }: { questions: LessonQuestion[] }) {
 
   if (finished) {
     return (
-      <section className="px-5 pb-6">
-        <div className="card-soft overflow-hidden">
-          <div className={`px-5 py-8 text-center ${passed ? "bg-gradient-to-r from-primary-muted to-[#f0f9f6]" : "bg-gradient-to-r from-[#fdf2f2] to-white"}`}>
-            <p className="text-[10px] font-semibold tracking-wider text-primary">QUIZ RESULT</p>
-            <p className="mt-3 text-[48px] font-bold text-foreground">{score}</p>
+      <section className="page-section pb-8">
+        <div className="card-premium overflow-hidden animate-scale-in">
+          <div className={passed ? "result-banner-pass px-5 py-8" : "result-banner-fail px-5 py-8"}>
+            <p className="section-label">QUIZ RESULT</p>
+            <p className="quiz-score-display mt-3">{score}</p>
             <p className="text-[14px] text-muted">/ 100点</p>
-            <p className={`mt-4 text-[16px] font-bold ${passed ? "text-primary" : "text-[#9b3b3b]"}`}>
+            <p className={`mt-4 text-[16px] font-bold ${passed ? "text-primary" : "text-[var(--danger)]"}`}>
               {passed ? "合格おめでとうございます！" : "もう一度チャレンジしましょう"}
             </p>
             <p className="mt-2 text-[12px] text-muted">
               合格ライン {PASS_SCORE}点 · 正解 {correctCount}/{total}問
             </p>
-            <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2">
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-border-subtle bg-white/90 px-4 py-2 shadow-[var(--shadow-xs)]">
               <span className="text-[14px] font-bold text-primary">+{xpGained} XP</span>
-              {passed && (
-                <span className="rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold text-white">バッジ解放の可能性</span>
-              )}
+              {passed && <span className="badge-primary">バッジ解放の可能性</span>}
             </div>
           </div>
           <div className="space-y-3 p-5">
-            <Link href="/progress" className="flex w-full items-center justify-center rounded-2xl bg-primary py-4 text-[15px] font-semibold text-white">
-              学習記録を確認
-            </Link>
-            <Link href="/learn" className="flex w-full items-center justify-center rounded-2xl border border-primary/20 py-3.5 text-[13px] font-semibold text-primary">
-              Missionを続ける
-            </Link>
+            <Link href="/progress" className="btn-primary">学習記録を確認</Link>
+            <Link href="/learn" className="btn-secondary">Missionを続ける</Link>
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="flex w-full items-center justify-center py-3 text-[13px] font-medium text-muted"
+              className="flex w-full justify-center py-3 text-[13px] font-medium text-muted transition-opacity active:opacity-60"
             >
               もう一度挑戦
             </button>
@@ -95,30 +89,31 @@ export function QuizEngine({ questions }: { questions: LessonQuestion[] }) {
 
   return (
     <>
-      <section className="px-5 pb-5">
-        <div className="flex items-center justify-between text-[11px]">
+      <section className="page-section pt-0">
+        <div className="section-heading-row text-[11px]">
           <span className="text-muted">問題 {index + 1} / {total}</span>
           <span className="font-semibold text-primary">
             暫定 {Math.round((correctCount / total) * 100)}点
           </span>
         </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-primary-muted">
-          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${((index + (answered ? 1 : 0)) / total) * 100}%` }} />
+        <div className="progress-track progress-glow mt-2">
+          <div
+            className="progress-fill"
+            style={{ width: `${((index + (answered ? 1 : 0)) / total) * 100}%` }}
+          />
         </div>
       </section>
 
-      <section className="px-5 pb-5">
+      <section className="page-section">
         <div className="card-soft p-5">
-          <span className="inline-flex rounded-lg bg-primary-muted px-2.5 py-1 text-[10px] font-semibold text-primary">
-            QUIZ {String(index + 1).padStart(2, "0")}
-          </span>
-          <p className="mt-4 text-[17px] font-bold leading-snug text-foreground">
+          <span className="badge-muted">QUIZ {String(index + 1).padStart(2, "0")}</span>
+          <p className="mt-4 text-[17px] font-bold leading-snug tracking-tight text-foreground">
             Q. {current.question}
           </p>
         </div>
       </section>
 
-      <section className="px-5 pb-5">
+      <section className="page-section">
         <ul className="space-y-2.5">
           {current.choices.map((choice, i) => (
             <li key={choice}>
@@ -126,19 +121,17 @@ export function QuizEngine({ questions }: { questions: LessonQuestion[] }) {
                 type="button"
                 onClick={() => handleSelect(i)}
                 disabled={answered}
-                className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition ${
+                className={
                   !answered
-                    ? "border-border bg-background active:border-primary active:bg-primary-muted"
+                    ? "choice-btn"
                     : i === current.answerIndex
-                      ? "border-primary bg-[#e8f5f0]"
+                      ? "choice-btn correct"
                       : selected === i
-                        ? "border-[#e8b4b4] bg-[#fdf2f2]"
-                        : "border-border bg-background opacity-60"
-                }`}
+                        ? "choice-btn incorrect"
+                        : "choice-btn opacity-60"
+                }
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-[13px] font-bold text-primary shadow-sm">
-                  {CHOICE_LABELS[i]}
-                </span>
+                <span className="choice-letter">{CHOICE_LABELS[i]}</span>
                 <span className="text-[14px] font-medium text-foreground">{choice}</span>
               </button>
             </li>
@@ -147,16 +140,12 @@ export function QuizEngine({ questions }: { questions: LessonQuestion[] }) {
       </section>
 
       {answered && (
-        <section className="px-5 pb-6">
+        <section className="page-section pb-8 animate-fade-up">
           <div className="card-soft mb-4 p-4">
-            <p className="text-[10px] font-semibold text-primary">解説</p>
+            <p className="section-label">EXPLANATION</p>
             <p className="mt-2 text-[13px] leading-relaxed text-muted">{current.explanation}</p>
           </div>
-          <button
-            type="button"
-            onClick={handleNext}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-4 text-[15px] font-semibold text-white"
-          >
+          <button type="button" onClick={handleNext} className="btn-primary">
             {index < total - 1 ? "次の問題へ" : "結果を見る"}
           </button>
         </section>

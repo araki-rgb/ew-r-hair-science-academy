@@ -46,7 +46,7 @@ export default function Home() {
       <section className="page-header relative overflow-hidden">
         <div className="pointer-events-none absolute -right-12 -top-8 h-44 w-44 rounded-full bg-primary-muted/70 blur-3xl" />
         <p className="section-label animate-fade-up">EW-R HAIR SCIENCE ACADEMY</p>
-        <h1 className="page-title animate-fade-up animate-fade-up-delay-1">
+        <h1 className="text-display animate-fade-up animate-fade-up-delay-1">
           学ぶ · 理解する ·
           <br />
           <span className="text-primary">活かす · 提案する</span>

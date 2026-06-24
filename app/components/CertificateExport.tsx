@@ -20,6 +20,7 @@ export function CertificateExport({ mission, accuracy, userName }: Props) {
     window.addEventListener("ewr-profile-change", handler);
     return () => window.removeEventListener("ewr-profile-change", handler);
   }, [userName]);
+
   const date = new Date().toLocaleDateString("ja-JP", {
     year: "numeric",
     month: "2-digit",
@@ -39,44 +40,44 @@ export function CertificateExport({ mission, accuracy, userName }: Props) {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 800, 560);
 
-    ctx.strokeStyle = "#1b7a5a";
+    ctx.strokeStyle = "#1a7556";
     ctx.lineWidth = 3;
     ctx.strokeRect(24, 24, 752, 512);
 
-    ctx.strokeStyle = "#c4a574";
+    ctx.strokeStyle = "#b8956a";
     ctx.lineWidth = 1;
     ctx.strokeRect(36, 36, 728, 488);
 
-    ctx.fillStyle = "#1b7a5a";
+    ctx.fillStyle = "#1a7556";
     ctx.font = "bold 14px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("EW-R HAIR SCIENCE ACADEMY", 400, 80);
 
-    ctx.fillStyle = "#c4a574";
+    ctx.fillStyle = "#b8956a";
     ctx.font = "12px sans-serif";
     ctx.fillText("CERTIFICATE OF COMPLETION", 400, 108);
 
-    ctx.fillStyle = "#142820";
+    ctx.fillStyle = "#132820";
     ctx.font = "bold 32px sans-serif";
     ctx.fillText("修了認定証", 400, 170);
 
     ctx.font = "18px sans-serif";
-    ctx.fillStyle = "#1b7a5a";
+    ctx.fillStyle = "#1a7556";
     ctx.fillText(`Mission ${mission.missionNumber}: ${mission.title}`, 400, 220);
 
-    ctx.fillStyle = "#5f726c";
-    ctx.font="16px sans-serif";
+    ctx.fillStyle = "#5c6f68";
+    ctx.font = "16px sans-serif";
     ctx.fillText(`${name} 様`, 400, 270);
 
     ctx.font = "14px sans-serif";
     ctx.fillText(`正答率 ${accuracy}% · ${date} 修了`, 400, 310);
 
-    ctx.fillStyle = "#5f726c";
+    ctx.fillStyle = "#5c6f68";
     ctx.font = "12px sans-serif";
     const desc = mission.description.slice(0, 60);
     ctx.fillText(desc, 400, 360);
 
-    ctx.strokeStyle = "#1b7a5a";
+    ctx.strokeStyle = "#1a7556";
     ctx.beginPath();
     ctx.moveTo(280, 420);
     ctx.lineTo(520, 420);
@@ -98,12 +99,8 @@ export function CertificateExport({ mission, accuracy, userName }: Props) {
   };
 
   return (
-    <button
-      type="button"
-      onClick={downloadCertificate}
-      className="flex w-full items-center justify-center gap-2 rounded-2xl border border-gold/30 bg-gold-muted py-3.5 text-[13px] font-semibold text-[#9a7b4f]"
-    >
-      <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+    <button type="button" onClick={downloadCertificate} className="btn-gold">
+      <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden>
         <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
       </svg>
       認定証を保存（PNG）

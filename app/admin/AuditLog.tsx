@@ -26,25 +26,32 @@ export function AuditLog() {
   }, []);
 
   if (error) {
-    return <p className="px-5 text-[12px] text-muted">{error}（admin@ew-r.co.jp でログインしてください）</p>;
+    return (
+      <section className="page-section pb-8">
+        <p className="text-[12px] text-muted">{error}（admin@ew-r.co.jp でログインしてください）</p>
+      </section>
+    );
   }
 
   return (
-    <section className="px-5 pb-6">
-      <h2 className="text-[15px] font-bold text-foreground">監査ログ（直近50件）</h2>
+    <section className="page-section pb-8">
+      <p className="section-label">AUDIT TRAIL</p>
+      <h2 className="section-title">監査ログ（直近50件）</h2>
       <div className="mt-3 space-y-2">
         {entries.map((e) => (
-          <div key={e.id} className="card-soft p-3">
+          <div key={e.id} className="card-soft p-3.5">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[11px] font-semibold text-foreground">{e.action}</p>
+              <span className="badge-muted">{e.action}</span>
               <p className="text-[9px] text-muted">{new Date(e.at).toLocaleString("ja-JP")}</p>
             </div>
-            <p className="mt-0.5 text-[10px] text-muted">
+            <p className="mt-1.5 text-[10px] text-muted">
               {e.userEmail ?? "ゲスト"} · {e.resource}
             </p>
           </div>
         ))}
-        {entries.length === 0 && <p className="text-[12px] text-muted">ログがありません</p>}
+        {entries.length === 0 && (
+          <p className="card-soft p-4 text-center text-[12px] text-muted">ログがありません</p>
+        )}
       </div>
     </section>
   );

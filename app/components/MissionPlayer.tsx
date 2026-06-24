@@ -147,8 +147,8 @@ export function MissionPlayer({ mission, nextMission }: Props) {
   return (
     <>
       <section className="page-header pb-3">
-        <Link href="/learn" className="btn-ghost">
-          <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+        <Link href="/learn" className="back-link">
+          <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden>
             <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
           </svg>
           Mission一覧
@@ -227,7 +227,7 @@ export function MissionPlayer({ mission, nextMission }: Props) {
 
         {step === "answer" && selected !== null && (
           <div className="animate-fade-up space-y-4">
-            <div className={`rounded-[var(--radius-lg)] px-4 py-5 text-center ${isCorrect ? "bg-[var(--success-muted)]" : "bg-[var(--danger-muted)]"}`}>
+            <div className={isCorrect ? "result-banner-pass" : "result-banner-fail"}>
               <p className={`text-[15px] font-bold ${isCorrect ? "text-primary" : "text-[var(--danger)]"}`}>
                 {isCorrect ? `正解 — +${XP_REWARDS.questionCorrect} XP` : `不正解 — +${XP_REWARDS.questionWrong} XP`}
               </p>
@@ -380,7 +380,7 @@ export function MissionPlayer({ mission, nextMission }: Props) {
             <Link href={`/learn/${nextMission.slug}`} className="btn-primary">
               次のMissionを開始
             </Link>
-            <Link href="/learn" className="flex w-full justify-center py-3 text-[13px] font-medium text-muted">
+            <Link href="/learn" className="btn-ghost flex w-full justify-center py-3 text-[13px]">
               あとで続ける
             </Link>
           </div>

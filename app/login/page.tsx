@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/app/components/AppShell";
+import { BrandLogo } from "@/app/components/BrandLogo";
 import { PageHeader } from "@/app/components/PageHeader";
 import { useAuth } from "@/app/hooks/useAuth";
 
@@ -30,11 +31,16 @@ export default function LoginPage() {
 
   return (
     <AppShell activeNav="progress">
-      <PageHeader
-        label="ENTERPRISE LOGIN"
-        title="法人アカウント"
-        description="学習進捗をサーバーに保存。管理者は進捗・監査ログを一元確認できます。"
-      />
+      <section className="page-header pb-2">
+        <div className="flex justify-center">
+          <BrandLogo size="lg" />
+        </div>
+        <p className="section-label mt-5 text-center">ENTERPRISE LOGIN</p>
+        <h1 className="page-title text-center">法人アカウント</h1>
+        <p className="page-desc text-center">
+          学習進捗をサーバーに保存。管理者は進捗・監査ログを一元確認できます。
+        </p>
+      </section>
 
       <section className="page-section pt-0">
         <div className="card-premium p-5">

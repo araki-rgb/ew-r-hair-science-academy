@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { AppShell } from "@/app/components/AppShell";
+import { PageHeader } from "@/app/components/PageHeader";
 import { objectionHandlers, visitPrepChecklist, clientHandouts } from "@/lib/data/sales-toolkit";
 
 export default function SalesToolkitPage() {
   return (
     <AppShell activeNav="products">
-      <section className="page-header pb-3">
-        <Link href="/products" className="back-link">← 営業支援</Link>
-        <p className="section-label mt-4">SALES TOOLKIT</p>
-        <h1 className="page-title">営業ツールキット</h1>
-        <p className="page-desc">訪問準備・反論処理・お客様説明素材</p>
-      </section>
+      <PageHeader
+        backHref="/products"
+        backLabel="営業支援"
+        label="SALES TOOLKIT"
+        title="営業ツールキット"
+        description="訪問準備・反論処理・お客様説明素材"
+      />
 
       <section className="page-section pt-0">
         <p className="section-label">OBJECTION HANDLING</p>
@@ -21,7 +23,7 @@ export default function SalesToolkitPage() {
               <p className="text-[12px] font-bold text-[var(--danger)]">{o.objection}</p>
               <p className="mt-2 text-[12px] leading-relaxed text-foreground">{o.response}</p>
               {o.product && (
-                <Link href={`/products/${o.product}`} className="btn-ghost mt-2">
+                <Link href={`/products/${o.product}`} className="btn-ghost mt-2 text-[11px]">
                   関連製品 →
                 </Link>
               )}

@@ -16,14 +16,14 @@ export function VideoArea({ video, compact = false, questionId }: Props) {
 
   if (video.status === "ready" && video.url) {
     return (
-      <div className="video-education-block overflow-hidden rounded-2xl">
+      <div className="video-education-block">
         <video
           src={video.url}
           poster={video.thumbnailUrl ?? undefined}
           controls
           className="aspect-video w-full bg-black"
         />
-        <div className="border-t border-border bg-white px-4 py-3">
+        <div className="video-education-meta">
           <p className="text-[12px] font-bold text-foreground">{video.title}</p>
           {video.duration && (
             <p className="mt-0.5 text-[10px] text-muted">{video.duration}</p>
@@ -33,17 +33,15 @@ export function VideoArea({ video, compact = false, questionId }: Props) {
           )}
         </div>
         {chapters && chapters.length > 0 && (
-          <div className="border-t border-border bg-primary-muted/30 px-4 py-3">
-            <p className="text-[10px] font-bold text-primary">チャプター解説</p>
-            <div className="mt-2 flex gap-1 overflow-x-auto pb-1">
+          <div className="video-chapter-track">
+            <p className="section-label">CHAPTERS</p>
+            <div className="mt-2 flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
               {chapters.map((ch, i) => (
                 <button
                   key={ch.time}
                   type="button"
                   onClick={() => setActiveChapter(i)}
-                  className={`shrink-0 rounded-lg px-2.5 py-1 text-[9px] font-semibold ${
-                    activeChapter === i ? "bg-primary text-white" : "bg-white text-muted"
-                  }`}
+                  className={`filter-pill ${activeChapter === i ? "active" : ""}`}
                 >
                   {ch.time}
                 </button>
@@ -58,15 +56,16 @@ export function VideoArea({ video, compact = false, questionId }: Props) {
   }
 
   return (
-    <div className={`video-placeholder overflow-hidden rounded-2xl aspect-[16/9]`}>
-      <div className="flex h-full flex-col items-center justify-center px-6 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm">
-          <svg viewBox="0 0 20 20" fill="white" className="h-6 w-6">
+    <div className="video-placeholder aspect-[16/9] overflow-hidden rounded-[var(--radius-xl)]">
+      <div className="video-placeholder-inner">
+        <div className="video-play-btn">
+          <svg viewBox="0 0 20 20" fill="white" className="h-6 w-6" aria-hidden>
             <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
           </svg>
         </div>
-        <p className="mt-3 text-[12px] font-semibold text-white">動画教材（準備中）</p>
+        <p className="mt-3 text-[12px] font-semibold text-white">動画教材</p>
         <p className="mt-1 text-[10px] text-white/70">{video.title}</p>
+        <span className="badge-gold mt-3">準備中</span>
       </div>
     </div>
   );

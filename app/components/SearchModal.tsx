@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { BrandMark } from "./BrandLogo";
 import { lessons } from "@/lib/data/lessons";
 import { products } from "@/lib/data/products";
 import { glossaryTerms } from "@/lib/data/glossary";
@@ -15,6 +16,15 @@ export function SearchModal({ open, onClose }: Props) {
   useEffect(() => {
     if (!open) setQuery("");
   }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -36,57 +46,96 @@ export function SearchModal({ open, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-start justify-center bg-black/40 px-4 pt-16 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-[400px] animate-scale-in rounded-2xl bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="border-b border-border p-4">
+    <div className="search-modal-overlay animate-fade-in" onClick={onClose} role="presentation">
+      <div
+        className="search-modal-panel animate-scale-in"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="検索"
+      >
+        <div className="border-b border-border-subtle px-4 pb-3 pt-4">
+          <div className="mb-3 flex items-center gap-2.5">
+            <BrandMark size="sm" />
+            <div>
+              <p className="text-[11px] font-bold text-foreground">クイック検索</p>
+              <p className="text-[9px] text-muted">Mission · 製品 · 用語</p>
+            </div>
+          </div>
           <input
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Mission・製品・用語を検索..."
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-[14px] outline-none focus:border-primary"
+            placeholder="キーワードを入力..."
+            className="input-field"
           />
         </div>
-        <div className="max-h-[60vh] overflow-y-auto p-4">
+        <div className="max-h-[min(60vh,28rem)] overflow-y-auto px-4 py-3 scrollbar-hide">
           {!query.trim() && (
-            <p className="text-center text-[12px] text-muted">キーワードを入力してください</p>
+            <p className="py-6 text-center text-[12px] text-muted">キーワードを入力してください</p>
           )}
           {query.trim() && !hasResults && (
-            <p className="text-center text-[12px] text-muted">該当する結果がありません</p>
+            <p className="py-6 text-center text-[12px] text-muted">該当する結果がありません</p>
           )}
           {results.lessons.length > 0 && (
             <div className="mb-4">
-              <p className="text-[10px] font-bold text-muted">MISSION</p>
-              {results.lessons.map((l) => (
-                <Link key={l.slug} href={`/learn/${l.slug}`} onClick={handleSelect} className="mt-2 block rounded-xl bg-primary-muted/40 px-3 py-2.5">
-                  <p className="text-[13px] font-semibold">{l.title}</p>
-                  <p className="text-[10px] text-muted">{l.description.slice(0, 40)}…</p>
-                </Link>
-              ))}
+              <p className="section-label">MISSION</p>
+              <div className="mt-2 space-y-2">
+                {results.lessons.map((l) => (
+                  <Link
+                    key={l.slug}
+                    href={`/learn/${l.slug}`}
+                    onClick={handleSelect}
+                    className="search-result-item"
+                  >
+                    <p className="text-[13px] font-semibold text-foreground">{l.title}</p>
+                    <p className="mt-0.5 text-[10px] text-muted">{l.description.slice(0, 48)}…</p>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
           {results.products.length > 0 && (
             <div className="mb-4">
-              <p className="text-[10px] font-bold text-muted">製品</p>
-              {results.products.map((p) => (
-                <Link key={p.slug} href={`/products/${p.slug}`} onClick={handleSelect} className="mt-2 block rounded-xl bg-primary-muted/40 px-3 py-2.5">
-                  <p className="text-[13px] font-semibold">{p.name}</p>
-                  <p className="text-[10px] text-muted">{p.tagline}</p>
-                </Link>
-              ))}
+              <p className="section-label">PRODUCTS</p>
+              <div className="mt-2 space-y-2">
+                {results.products.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/products/${p.slug}`}
+                    onClick={handleSelect}
+                    className="search-result-item"
+                  >
+                    <p className="text-[13px] font-semibold text-foreground">{p.name}</p>
+                    <p className="mt-0.5 text-[10px] text-muted">{p.tagline}</p>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
           {results.terms.length > 0 && (
-            <div>
-              <p className="text-[10px] font-bold text-muted">用語</p>
-              {results.terms.map((t) => (
-                <Link key={t.term} href="/glossary" onClick={handleSelect} className="mt-2 block rounded-xl bg-primary-muted/40 px-3 py-2.5">
-                  <p className="text-[13px] font-semibold">{t.term}</p>
-                  <p className="text-[10px] text-muted">{t.definition.slice(0, 50)}…</p>
-                </Link>
-              ))}
+            <div className="pb-2">
+              <p className="section-label">GLOSSARY</p>
+              <div className="mt-2 space-y-2">
+                {results.terms.map((t) => (
+                  <Link
+                    key={t.term}
+                    href="/glossary"
+                    onClick={handleSelect}
+                    className="search-result-item"
+                  >
+                    <p className="text-[13px] font-semibold text-foreground">{t.term}</p>
+                    <p className="mt-0.5 text-[10px] text-muted">{t.definition.slice(0, 52)}…</p>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
+        </div>
+        <div className="border-t border-border-subtle px-4 py-3">
+          <button type="button" onClick={onClose} className="btn-secondary">
+            閉じる
+          </button>
         </div>
       </div>
     </div>

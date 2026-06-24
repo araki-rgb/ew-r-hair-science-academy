@@ -29,24 +29,21 @@ export function RecommendedLessons({ initialMode }: { initialMode?: UserMode }) 
   );
 
   return (
-    <div className="space-y-3">
-      {lessons.map((lesson, i) => (
+    <div className="lesson-recommend-list space-y-3">
+      {lessons.map((lesson) => (
         <Link
           key={lesson.slug}
           href={`/learn/${lesson.slug}`}
-          className="card-soft group block overflow-hidden transition"
-          style={{ animationDelay: `${i * 0.06}s` }}
+          className="card-soft card-interactive group block overflow-hidden"
         >
           <div className="flex">
-            <div className="flex w-1 shrink-0 bg-gradient-to-b from-primary to-primary-light" />
+            <div className="lesson-accent-bar" />
             <div className="flex-1 p-4">
               <div className="flex items-center justify-between gap-2">
-                <span className="rounded-md bg-primary-muted px-2 py-0.5 text-[9px] font-bold text-primary">
-                  {lesson.tag}
-                </span>
+                <span className="badge-muted">{lesson.tag}</span>
                 <span className="text-[10px] text-muted">Lv.{lesson.level} · {lesson.duration}</span>
               </div>
-              <p className="mt-2 text-[14px] font-bold text-foreground group-active:text-primary">
+              <p className="mt-2 text-[14px] font-bold tracking-tight text-foreground group-active:text-primary">
                 {lesson.title}
               </p>
               <p className="mt-1.5 text-[11px] leading-relaxed text-muted">{lesson.reason}</p>

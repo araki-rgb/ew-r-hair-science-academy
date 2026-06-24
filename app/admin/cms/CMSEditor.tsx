@@ -88,8 +88,8 @@ export function CMSEditor() {
 
   return (
     <>
-      <section className="px-5 pb-4">
-        <div className="flex gap-1 overflow-x-auto rounded-2xl bg-primary-muted/50 p-1">
+      <section className="page-section pt-0">
+        <div className="tab-switcher">
           {([
             ["lessons", "Mission"],
             ["products", "製品"],
@@ -99,9 +99,7 @@ export function CMSEditor() {
               key={key}
               type="button"
               onClick={() => { setTab(key); setSelected(null); setStatus(""); }}
-              className={`shrink-0 rounded-xl px-4 py-2 text-[12px] font-semibold ${
-                tab === key ? "bg-primary text-white" : "text-muted"
-              }`}
+              className={tab === key ? "active" : ""}
             >
               {label}
             </button>
@@ -109,20 +107,35 @@ export function CMSEditor() {
         </div>
       </section>
 
-      <section className="px-5 pb-6">
+      <section className="page-section pb-8">
         <div className="space-y-2">
           {tab === "lessons" && lessons.map((l) => (
-            <button key={l.slug} type="button" onClick={() => selectLesson(l.slug)} className={`card-soft w-full p-4 text-left ${selected === l.slug ? "ring-2 ring-primary/25" : ""}`}>
+            <button
+              key={l.slug}
+              type="button"
+              onClick={() => selectLesson(l.slug)}
+              className={`card-soft card-interactive w-full p-4 text-left ${selected === l.slug ? "cms-item-selected" : ""}`}
+            >
               <p className="text-[13px] font-bold">Mission {l.missionNumber}: {l.title}</p>
             </button>
           ))}
           {tab === "products" && products.map((p) => (
-            <button key={p.slug} type="button" onClick={() => selectProduct(p.slug)} className={`card-soft w-full p-4 text-left ${selected === p.slug ? "ring-2 ring-primary/25" : ""}`}>
+            <button
+              key={p.slug}
+              type="button"
+              onClick={() => selectProduct(p.slug)}
+              className={`card-soft card-interactive w-full p-4 text-left ${selected === p.slug ? "cms-item-selected" : ""}`}
+            >
               <p className="text-[13px] font-bold">{p.name}</p>
             </button>
           ))}
           {tab === "videos" && Object.entries(missionVideos).map(([id, v]) => (
-            <button key={id} type="button" onClick={() => selectVideo(id)} className={`card-soft w-full p-4 text-left ${selected === id ? "ring-2 ring-primary/25" : ""}`}>
+            <button
+              key={id}
+              type="button"
+              onClick={() => selectVideo(id)}
+              className={`card-soft card-interactive w-full p-4 text-left ${selected === id ? "cms-item-selected" : ""}`}
+            >
               <p className="text-[13px] font-bold">{v.title}</p>
               <p className="text-[10px] text-muted">{id}</p>
             </button>
@@ -130,32 +143,57 @@ export function CMSEditor() {
         </div>
 
         {selected && (
-          <div className="card-premium mt-4 space-y-3 p-4">
-            <p className="text-[12px] font-bold text-primary">編集: {selected}</p>
+          <div className="card-premium mt-4 space-y-3 p-4 animate-fade-up">
+            <p className="section-label">EDITING</p>
+            <p className="section-title">編集: {selected}</p>
             {tab === "lessons" && (
               <>
-                <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="タイトル" className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="説明" rows={3} className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
+                <div>
+                  <label className="input-label">タイトル</label>
+                  <input value={title} onChange={(e) => setTitle(e.target.value)} className="input-field mt-1.5" />
+                </div>
+                <div>
+                  <label className="input-label">説明</label>
+                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="textarea-field mt-1.5" />
+                </div>
               </>
             )}
             {tab === "products" && (
               <>
-                <input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="タグライン" className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
-                <textarea value={hairdresserTalk} onChange={(e) => setHairdresserTalk(e.target.value)} placeholder="美容師向け説明" rows={2} className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
-                <textarea value={dealerTalk} onChange={(e) => setDealerTalk(e.target.value)} placeholder="ディーラー向けトーク" rows={2} className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
+                <div>
+                  <label className="input-label">タグライン</label>
+                  <input value={tagline} onChange={(e) => setTagline(e.target.value)} className="input-field mt-1.5" />
+                </div>
+                <div>
+                  <label className="input-label">美容師向け説明</label>
+                  <textarea value={hairdresserTalk} onChange={(e) => setHairdresserTalk(e.target.value)} rows={2} className="textarea-field mt-1.5" />
+                </div>
+                <div>
+                  <label className="input-label">ディーラー向けトーク</label>
+                  <textarea value={dealerTalk} onChange={(e) => setDealerTalk(e.target.value)} rows={2} className="textarea-field mt-1.5" />
+                </div>
               </>
             )}
             {tab === "videos" && (
               <>
-                <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="動画タイトル" className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
-                <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="動画URL" className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="説明" rows={2} className="w-full rounded-xl border border-border px-3 py-2 text-[13px]" />
+                <div>
+                  <label className="input-label">動画タイトル</label>
+                  <input value={title} onChange={(e) => setTitle(e.target.value)} className="input-field mt-1.5" />
+                </div>
+                <div>
+                  <label className="input-label">動画URL</label>
+                  <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="input-field mt-1.5" />
+                </div>
+                <div>
+                  <label className="input-label">説明</label>
+                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="textarea-field mt-1.5" />
+                </div>
               </>
             )}
-            <button type="button" onClick={save} disabled={saving} className="w-full rounded-2xl bg-primary py-3 text-[13px] font-semibold text-white disabled:opacity-60">
+            <button type="button" onClick={save} disabled={saving} className="btn-primary">
               {saving ? "保存中..." : "保存する"}
             </button>
-            {status && <p className="text-center text-[11px] text-primary">{status}</p>}
+            {status && <p className="text-center text-[11px] font-medium text-primary">{status}</p>}
           </div>
         )}
       </section>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { BrandLogo } from "./BrandLogo";
 import { ModeToggle } from "./ModeToggle";
 import { isOnboardingDone, setOnboardingDone } from "@/lib/storage/progress-store";
 
@@ -15,15 +16,18 @@ export function Onboarding() {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#132820]/50 backdrop-blur-md md:items-center">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#132820]/45 backdrop-blur-xl md:items-center">
       <div className="animate-scale-in mx-auto w-full max-w-[430px] overflow-hidden rounded-t-[2rem] bg-white shadow-[var(--shadow-lg)] md:rounded-[2rem]">
-        <div className="relative overflow-hidden bg-gradient-to-br from-primary-dark via-primary to-primary-light px-6 py-10 text-center text-white">
-          <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
-          <p className="relative text-[9px] font-bold tracking-[0.28em] text-white/80">EW-R HAIR SCIENCE ACADEMY</p>
-          <h2 className="relative mt-4 text-[1.5rem] font-bold leading-snug tracking-tight">ようこそ</h2>
-          <p className="relative mt-2 text-[13px] leading-relaxed text-white/90">
-            学ぶ · 理解する · 活かす · 提案する
-          </p>
+        <div className="hero-stage relative !h-auto overflow-hidden px-6 pb-8 pt-8 text-center">
+          <div className="hero-mesh absolute inset-0" />
+          <div className="hero-orb hero-orb-a absolute" aria-hidden />
+          <div className="relative z-10 flex flex-col items-center">
+            <BrandLogo size="lg" variant="inverse" />
+            <h2 className="text-display-inverse mt-5 text-[1.5rem]">ようこそ</h2>
+            <p className="mt-2 text-[13px] leading-relaxed text-white/80">
+              学ぶ · 理解する · 活かす · 提案する
+            </p>
+          </div>
         </div>
         <div className="space-y-5 px-6 py-6">
           <div>
@@ -58,7 +62,7 @@ export function Onboarding() {
           <button
             type="button"
             onClick={() => { setOnboardingDone(); setShow(false); }}
-            className="w-full py-2 text-[12px] font-medium text-muted"
+            className="w-full py-2 text-[12px] font-medium text-muted transition-opacity active:opacity-60"
           >
             あとで始める
           </button>
