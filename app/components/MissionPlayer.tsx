@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Mission, MissionQuestion } from "@/lib/types";
 import { XP_REWARDS } from "@/lib/data/gamification";
+import { completeMission, loadProgress } from "@/lib/storage/progress-store";
 import { DiagramArea } from "./DiagramArea";
 import { VideoArea } from "./VideoArea";
 
@@ -119,6 +120,7 @@ export function MissionPlayer({ mission, nextMission }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
   const [sessionXp, setSessionXp] = useState(0);
+  const [saved, setSaved] = useState(false);
 
   const total = mission.questions.length;
   const current = mission.questions[qIndex];
@@ -150,7 +152,15 @@ export function MissionPlayer({ mission, nextMission }: Props) {
       setSelected(null);
       setStep("scene");
     } else {
-      setSessionXp((x) => x + XP_REWARDS.missionComplete);
+      const stepBonus = XP_REWARDS.stepComplete * 5;
+      const missionBonus = XP_REWARDS.missionComplete;
+      const finalXp = sessionXp + stepBonus + missionBonus;
+      const finalAccuracy = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+      setSessionXp(finalXp);
+      if (!saved) {
+        completeMission(loadProgress(), mission.slug, finalXp, finalAccuracy);
+        setSaved(true);
+      }
       setStep("complete");
     }
   };

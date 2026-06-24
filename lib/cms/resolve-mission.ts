@@ -1,4 +1,6 @@
 import { getDiagramPrompt } from "../content/diagram-prompts";
+import { getDiagramImageUrl } from "../content/diagram-images";
+import { missionSceneOverrides } from "../content/mission-scenes";
 import type {
   Lesson,
   LessonQuestion,
@@ -51,6 +53,8 @@ const sceneTemplates: Record<string, Partial<SceneContext>> = {
 };
 
 function buildScene(lesson: Lesson, question: LessonQuestion, index: number): SceneContext {
+  const override = missionSceneOverrides[question.id];
+  if (override?.scene) return override.scene;
   if (question.scene) return question.scene;
 
   const template = sceneTemplates[lesson.slug] ?? {
@@ -69,11 +73,15 @@ function buildScene(lesson: Lesson, question: LessonQuestion, index: number): Sc
 }
 
 function buildAiExplanation(question: LessonQuestion): string {
+  const override = missionSceneOverrides[question.id];
+  if (override?.aiExplanation) return override.aiExplanation;
   if (question.aiExplanation) return question.aiExplanation;
   return `【AI解説】${question.explanation}\n\n科学的な視点から整理すると、この知識は施術設計と提案の両方に直結します。断定表現を避け、髪と頭皮の状態に合わせた説明を心がけましょう。`;
 }
 
 function buildSummaryPoints(question: LessonQuestion): string[] {
+  const override = missionSceneOverrides[question.id];
+  if (override?.summaryPoints?.length) return override.summaryPoints;
   if (question.summaryPoints?.length) return question.summaryPoints;
 
   const correct = question.choices[question.answerIndex];
@@ -91,6 +99,13 @@ function resolveQuestion(
   index: number,
 ): MissionQuestion {
   const promptMeta = getDiagramPrompt(question.diagramType);
+  const generatedUrl = getDiagramImageUrl(question.diagramType);
+  const imageUrl = question.diagram?.imageUrl ?? generatedUrl;
+  const status = imageUrl
+    ? question.diagram?.imageUrl
+      ? "uploaded"
+      : "generated"
+    : "placeholder";
 
   return {
     ...question,
@@ -102,8 +117,8 @@ function resolveQuestion(
       title: question.diagram?.title ?? question.diagramTitle,
       alt: question.diagram?.alt ?? promptMeta.alt,
       grokPrompt: question.diagram?.grokPrompt ?? promptMeta.grokPrompt,
-      imageUrl: question.diagram?.imageUrl ?? null,
-      status: question.diagram?.imageUrl ? "uploaded" : "placeholder",
+      imageUrl,
+      status,
     },
     video: {
       id: question.video?.id ?? `${question.id}-video`,

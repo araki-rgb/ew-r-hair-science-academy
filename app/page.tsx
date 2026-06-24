@@ -7,6 +7,7 @@ import { ModeToggle } from "./components/ModeToggle";
 import { RecommendedLessons } from "./components/RecommendedLessons";
 import { RoadmapTimeline } from "./components/RoadmapTimeline";
 import { categories } from "@/lib/data/categories";
+import { getDiagramImageUrl } from "@/lib/content/diagram-images";
 import { demoProgress, getOverallProgress } from "@/lib/data/progress";
 import { getLessonBySlug } from "@/lib/data/lessons";
 
@@ -132,10 +133,17 @@ export default function Home() {
           <p className="mt-1 text-[11px] text-muted">施術理解を深めるビジュアルコンテンツ</p>
         </div>
         <div className="scrollbar-hide mt-4 flex gap-3 overflow-x-auto px-5 pb-1">
-          {diagrams.map(({ label, type, desc }) => (
+          {diagrams.map(({ label, type, desc }) => {
+            const img = getDiagramImageUrl(type);
+            return (
             <div key={label} className="card-soft w-[156px] shrink-0 overflow-hidden">
-              <div className="diagram-frame flex h-[108px] items-center justify-center p-3">
-                <DiagramIllustration type={type} />
+              <div className="diagram-frame flex h-[108px] items-center justify-center overflow-hidden p-1">
+                {img ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={img} alt={label} className="h-full w-full object-cover rounded-lg" />
+                ) : (
+                  <DiagramIllustration type={type} />
+                )}
               </div>
               <div className="border-t border-border bg-white px-3.5 py-3">
                 <p className="text-[12px] font-bold text-foreground">{label}</p>
@@ -148,7 +156,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          ))}
+          );})}
         </div>
       </section>
 

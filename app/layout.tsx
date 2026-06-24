@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_JP } from "next/font/google";
+import { Onboarding } from "./components/Onboarding";
 import "./globals.css";
 
 const notoSans = Noto_Sans_JP({
@@ -29,7 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" className={notoSans.variable}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <Onboarding />
+      </body>
     </html>
   );
 }

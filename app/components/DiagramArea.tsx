@@ -45,12 +45,12 @@ export function DiagramArea({ diagram, size = "default", showMeta = true }: Prop
               {diagram.status === "uploaded"
                 ? "図解投入済"
                 : diagram.status === "generated"
-                  ? "Grok生成済"
-                  : "図解プレースホルダ"}
+                  ? "AI図解"
+                  : "図解準備中"}
             </span>
           </div>
           <p className="text-[10px] leading-relaxed text-muted">{diagram.alt}</p>
-          {diagram.status === "placeholder" && (
+          {diagram.status !== "uploaded" && (
             <div className="rounded-xl bg-primary-muted/40 px-3 py-2">
               <p className="text-[9px] font-semibold text-primary">Grok生成プロンプト（CMS編集可）</p>
               <p className="mt-1 line-clamp-2 text-[9px] leading-relaxed text-muted">
