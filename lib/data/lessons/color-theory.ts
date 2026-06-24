@@ -9,6 +9,9 @@ export const colorTheoryLesson: Lesson = {
     "色の原理と薬剤選択の考え方を整理し、再現性の高い施術設計につなげます。",
   duration: "約55分",
   lessonNumber: 1,
+  missionNumber: 3,
+  xpReward: 140,
+  nextMissionSlug: "developer-science",
   questions: [
     {
       id: "color-theory-1",

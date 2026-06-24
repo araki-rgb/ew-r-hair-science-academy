@@ -256,6 +256,16 @@ body {
   border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
 }
 
+.diagram-education-block {
+  position: relative;
+}
+
+.platform-pillar {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fcfa 100%);
+  border: 1px solid rgb(27 122 90 / 0.08);
+  border-radius: 1.25rem;
+}
+
 .mode-pill {
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }

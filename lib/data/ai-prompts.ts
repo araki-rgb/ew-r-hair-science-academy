@@ -5,6 +5,7 @@ export const aiPrompts: AIPrompt[] = [
     id: "keratin",
     question: "髪の主成分は？",
     category: "髪の基礎",
+    consultationMode: "treatment",
     answer:
       "髪の主成分はケラチンというタンパク質です。コルテックスを中心にタンパク質が集まっており、カラーやパーマの施術では内部構造への配慮が大切になります。",
     hairdresserAnswer:
@@ -22,6 +23,7 @@ export const aiPrompts: AIPrompt[] = [
     id: "developer",
     question: "2剤はなぜ大切？",
     category: "薬剤科学",
+    consultationMode: "chemical",
     answer:
       "2剤（オキシ）は1剤の作用を促し、施術の仕上がりに影響します。濃度や髪の状態に応じた選択が、施術時の負担に配慮した設計につながります。",
     hairdresserAnswer:
@@ -39,6 +41,7 @@ export const aiPrompts: AIPrompt[] = [
     id: "color-smell",
     question: "カラー後の匂いの原因は？",
     category: "施術後ケア",
+    consultationMode: "treatment",
     answer:
       "カラー後の匂いは、施術中の薬剤成分や残留物、アミノ化合物などが関係することがあります。十分な洗髪・後処理・ホームケアの提案が、仕上がり後の快適さにつながります。",
     hairdresserAnswer:
@@ -56,6 +59,7 @@ export const aiPrompts: AIPrompt[] = [
     id: "gray-hair",
     question: "白髪のお客様にはどう説明する？",
     category: "カウンセリング",
+    consultationMode: "treatment",
     answer:
       "白髪のお客様には、髪と頭皮の状態を確認しながら、エイジングケア視点で無理のないケア設計を提案しましょう。「白髪がなくなる」等の断定は避け、「今の髪状態に合わせたケア」「頭皮環境を整える視点」で説明すると信頼感が高まります。",
     hairdresserAnswer:
@@ -73,6 +77,7 @@ export const aiPrompts: AIPrompt[] = [
     id: "oxlon-proposal",
     question: "サロンにOXLONを提案するなら？",
     category: "製品提案",
+    consultationMode: "sales",
     answer:
       "まずサロンの施術メニューとお客様層をヒアリングし、2剤濃度の使い分けニーズがあるか確認します。「施術時の負担に配慮した設計」「ダメージ毛への配慮」「アフターケアの継続提案」という3つの軸で、製品ライン全体のストーリーを提案すると効果的です。",
     hairdresserAnswer:
@@ -85,11 +90,13 @@ export const aiPrompts: AIPrompt[] = [
       "導入後の教育支援（本プラットフォーム）をセットにすると、定着率が高まります。",
     ],
     relatedLesson: "ewr-products",
+    relatedProduct: "oxlon-3",
   },
   {
     id: "cuticle",
     question: "キューティクルが開くとどうなる？",
     category: "髪の基礎",
+    consultationMode: "chemical",
     answer:
       "キューティクルが開きやすい状態では、パサつきや手触りの変化、色落ちの印象につながることがあります。施術前後のケア設計や、ホームケアの提案根拠として活用できます。",
     hairdresserAnswer:
@@ -107,6 +114,7 @@ export const aiPrompts: AIPrompt[] = [
     id: "scalp-care",
     question: "頭皮ケアはなぜ重要？",
     category: "頭皮科学",
+    consultationMode: "treatment",
     answer:
       "健やかな髪を育むには、頭皮環境への配慮が大切です。頭皮の状態を正しく捉えたカウンセリングが、ホームケア提案の説得力を高めます。治療的な表現は避け、「頭皮環境を整える」視点で伝えましょう。",
     hairdresserAnswer:

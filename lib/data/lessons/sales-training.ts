@@ -9,6 +9,9 @@ export const salesTrainingLesson: Lesson = {
     "科学的根拠に基づく提案トークを練習し、サロン提案の幅を広げます。",
   duration: "約40分",
   lessonNumber: 1,
+  missionNumber: 7,
+  xpReward: 180,
+  nextMissionSlug: "customer-explanation",
   questions: [
     {
       id: "sales-training-1",

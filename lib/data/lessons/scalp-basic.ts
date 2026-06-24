@@ -9,6 +9,9 @@ export const scalpBasicLesson: Lesson = {
     "頭皮環境の見極め方と、健やかな髪を育むためのケア視点を学びます。",
   duration: "約35分",
   lessonNumber: 1,
+  missionNumber: 2,
+  xpReward: 130,
+  nextMissionSlug: "color-theory",
   questions: [
     {
       id: "scalp-basic-1",

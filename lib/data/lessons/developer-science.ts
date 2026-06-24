@@ -9,6 +9,9 @@ export const developerScienceLesson: Lesson = {
     "1剤・2剤の役割と酸化の仕組みを理解し、施術時の負担に配慮した設計を学びます。",
   duration: "約40分",
   lessonNumber: 1,
+  missionNumber: 4,
+  xpReward: 150,
+  nextMissionSlug: "treatment-aftercare",
   questions: [
     {
       id: "developer-science-1",

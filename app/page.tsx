@@ -33,13 +33,13 @@ export default function Home() {
         <div className="pointer-events-none absolute -right-12 -top-8 h-44 w-44 rounded-full bg-primary-muted/70 blur-3xl" />
         <p className="section-label animate-fade-up">EW-R HAIR SCIENCE ACADEMY</p>
         <h1 className="animate-fade-up animate-fade-up-delay-1 mt-3 text-[28px] font-bold leading-[1.3] tracking-tight text-foreground">
-          髪の科学を、
+          学ぶ · 理解する ·
           <br />
-          <span className="text-primary">現場の提案力</span>へ。
+          <span className="text-primary">活かす · 提案する</span>
         </h1>
         <p className="animate-fade-up animate-fade-up-delay-2 mt-3.5 text-[14px] leading-[1.8] text-muted">
-          美容師・ディーラー向けの本格教育プラットフォーム。
-          図解・動画・AI先生で、施術と提案の質を高めます。
+          美容師とディーラーのための企業向け教育プラットフォーム。
+          ストーリー型Mission・図解教材・AIアシスタントで、現場と営業の質を変えます。
         </p>
 
         <div className="animate-fade-up animate-fade-up-delay-3 mt-6">

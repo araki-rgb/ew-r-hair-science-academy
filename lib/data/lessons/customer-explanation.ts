@@ -9,6 +9,9 @@ export const customerExplanationLesson: Lesson = {
     "専門用語をやさしく伝える方法と、納得感のあるカウンセリング表現を学びます。",
   duration: "約35分",
   lessonNumber: 1,
+  missionNumber: 8,
+  xpReward: 200,
+  nextMissionSlug: null,
   questions: [
     {
       id: "customer-explanation-1",

@@ -19,11 +19,11 @@ export default function ProductsPage() {
     <AppShell activeNav="products">
       <section className="relative overflow-hidden px-5 pb-5 pt-7">
         <div className="pointer-events-none absolute -right-8 -top-4 h-32 w-32 rounded-full bg-primary-muted/70 blur-2xl" />
-        <p className="section-label">EW-R PRODUCT ACADEMY</p>
+        <p className="section-label">SALES ENABLEMENT</p>
         <h1 className="mt-2 text-[28px] font-bold tracking-tight text-foreground">
-          製品を理解し、
+          営業支援
           <br />
-          提案できる力へ。
+          ハブ
         </h1>
         <p className="mt-3 text-[14px] leading-relaxed text-muted">
           OXLONラインの特徴・提案シーン・営業トークを整理。

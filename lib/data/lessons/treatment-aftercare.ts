@@ -9,6 +9,9 @@ export const treatmentAftercareLesson: Lesson = {
     "施術後のケア設計と、ダメージを抑える後処理のポイントを習得します。",
   duration: "約30分",
   lessonNumber: 1,
+  missionNumber: 5,
+  xpReward: 160,
+  nextMissionSlug: "ewr-products",
   questions: [
     {
       id: "treatment-aftercare-1",

@@ -7,7 +7,14 @@ export function DiagramIllustration({ type }: { type: DiagramType }) {
     case "cuticle":
       return <CuticleDiagram />;
     case "chemical-reaction":
+    case "oxidation-reaction":
       return <ChemicalReaction />;
+    case "alkaline-reaction":
+      return <CuticleDiagram />;
+    case "hair-internal":
+      return <HairCrossSection />;
+    case "salon-scene":
+      return <CustomerScene />;
     case "scalp-environment":
       return <ScalpEnvironment />;
     case "color-residue":

@@ -30,10 +30,10 @@ export default function LearnPage() {
     <AppShell activeNav="learn">
       <section className="relative overflow-hidden px-5 pb-5 pt-7">
         <div className="pointer-events-none absolute -right-8 -top-4 h-32 w-32 rounded-full bg-primary-muted/70 blur-2xl" />
-        <p className="section-label">LEARNING PLATFORM</p>
-        <h1 className="mt-2 text-[28px] font-bold tracking-tight text-foreground">Learn</h1>
+        <p className="section-label">MISSION CENTER</p>
+        <h1 className="mt-2 text-[28px] font-bold tracking-tight text-foreground">Mission</h1>
         <p className="mt-3 text-[14px] leading-relaxed text-muted">
-          髪・頭皮・薬剤を、現場で使える知識へ。
+          現場シーンから始まるストーリー型学習。8つのMissionで提案力を育てます。
         </p>
         <div className="mt-5">
           <ModeToggle />

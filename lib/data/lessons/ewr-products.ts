@@ -9,6 +9,9 @@ export const ewrProductsLesson: Lesson = {
     "EW-R製品ラインの特徴と成分の考え方を整理し、現場で伝えられる知識を身につけます。",
   duration: "約50分",
   lessonNumber: 1,
+  missionNumber: 6,
+  xpReward: 170,
+  nextMissionSlug: "sales-training",
   questions: [
     {
       id: "ewr-products-1",

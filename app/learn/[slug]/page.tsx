@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { AppShell } from "@/app/components/AppShell";
-import { LessonPlayer } from "@/app/components/LessonPlayer";
-import { getLessonBySlug } from "@/lib/data/lessons";
+import { MissionPlayer } from "@/app/components/MissionPlayer";
+import { getMissionBySlug, getNextMission } from "@/lib/data/lessons";
 
 export function generateStaticParams() {
   return [
@@ -22,12 +22,14 @@ export default async function LessonPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const lesson = getLessonBySlug(slug);
-  if (!lesson) notFound();
+  const mission = getMissionBySlug(slug);
+  if (!mission) notFound();
+
+  const nextMission = getNextMission(slug);
 
   return (
     <AppShell activeNav="learn">
-      <LessonPlayer lesson={lesson} />
+      <MissionPlayer mission={mission} nextMission={nextMission} />
     </AppShell>
   );
 }
