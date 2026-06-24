@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AppShell } from "@/app/components/AppShell";
-import { DiagramIllustration } from "@/app/components/DiagramIllustration";
+import { getDiagramImageUrl } from "@/lib/content/diagram-images";
 import { products } from "@/lib/data/products";
 
 const featuredSlugs = ["oxlon-3", "oxlon-6", "oxlon-after-break"];
@@ -61,10 +61,13 @@ export default function ProductsPage() {
               href={`/products/${product.slug}`}
               className="card-premium group block overflow-hidden transition"
             >
-              <div className="diagram-frame p-5">
-                <div className="aspect-[2.2/1] w-full">
-                  <DiagramIllustration type={product.diagramType} />
-                </div>
+              <div className="diagram-frame overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getDiagramImageUrl(product.diagramType)}
+                  alt={product.name}
+                  className="aspect-[2.2/1] w-full object-cover"
+                />
               </div>
               <div className="p-4">
                 <div className="flex items-start justify-between gap-2">
@@ -134,8 +137,13 @@ export default function ProductsPage() {
               href={`/products/${product.slug}`}
               className="card-soft flex items-center gap-4 p-4 transition active:scale-[0.99]"
             >
-              <div className="diagram-frame h-16 w-16 shrink-0 overflow-hidden p-2">
-                <DiagramIllustration type={product.diagramType} />
+              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getDiagramImageUrl(product.diagramType)}
+                  alt={product.name}
+                  className="h-full w-full object-cover"
+                />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-semibold text-primary">{product.category}</p>

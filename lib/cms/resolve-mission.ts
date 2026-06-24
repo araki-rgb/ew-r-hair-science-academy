@@ -100,12 +100,12 @@ function resolveQuestion(
 ): MissionQuestion {
   const promptMeta = getDiagramPrompt(question.diagramType);
   const generatedUrl = getDiagramImageUrl(question.diagramType);
-  const imageUrl = question.diagram?.imageUrl ?? generatedUrl;
-  const status = imageUrl
-    ? question.diagram?.imageUrl
-      ? "uploaded"
-      : "generated"
-    : "placeholder";
+  const imageUrl = question.diagram?.imageUrl ?? generatedUrl ?? null;
+  const status: "placeholder" | "generated" | "uploaded" = question.diagram?.imageUrl
+    ? "uploaded"
+    : imageUrl
+      ? "generated"
+      : "placeholder";
 
   return {
     ...question,

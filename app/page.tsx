@@ -1,28 +1,41 @@
 import Link from "next/link";
 import { AppShell } from "./components/AppShell";
 import { CategoryIcon } from "./components/CategoryIcon";
-import { DiagramIllustration } from "./components/DiagramIllustration";
 import { HeroVisual } from "./components/HeroVisual";
 import { ModeToggle } from "./components/ModeToggle";
 import { RecommendedLessons } from "./components/RecommendedLessons";
 import { RoadmapTimeline } from "./components/RoadmapTimeline";
 import { categories } from "@/lib/data/categories";
-import { getDiagramImageUrl } from "@/lib/content/diagram-images";
+import { diagramGallery } from "@/lib/content/diagram-images";
+import { getDiagramPrompt } from "@/lib/content/diagram-prompts";
 import { demoProgress, getOverallProgress } from "@/lib/data/progress";
 import { getLessonBySlug } from "@/lib/data/lessons";
 
 const platformFeatures = [
-  { label: "図解教材", value: "120+", sub: "断面・反応・頭皮" },
+  { label: "図解教材", value: "16種", sub: "AI生成済み" },
   { label: "動画対応", value: "準備中", sub: "施術デモ収録予定" },
   { label: "AI先生", value: "24h", sub: "現場質問に即回答" },
 ];
 
-const diagrams = [
-  { label: "髪の断面図", type: "hair-cross-section" as const, desc: "3層構造" },
-  { label: "薬剤反応", type: "chemical-reaction" as const, desc: "1剤×2剤" },
-  { label: "キューティクル", type: "cuticle" as const, desc: "鱗片構造" },
-  { label: "頭皮環境", type: "scalp-environment" as const, desc: "土台ケア" },
-];
+const diagramLabels: Record<string, string> = {
+  "hair-cross-section": "髪の断面図",
+  cuticle: "キューティクル",
+  "hair-internal": "毛髪内部",
+  "chemical-reaction": "カラー反応",
+  "oxidation-reaction": "酸化反応",
+  "alkaline-reaction": "アルカリ反応",
+  "scalp-environment": "頭皮構造",
+  "color-residue": "カラー残留",
+  "gray-mechanism": "白髪メカニズム",
+  "customer-scene": "カウンセリング",
+  "dealer-scene": "営業提案",
+  developer: "オキシ濃度",
+  treatment: "施術フロー",
+  product: "製品ライン",
+  sales: "提案力向上",
+  "color-wheel": "カラーホイール",
+  "salon-scene": "サロン施術",
+};
 
 export default function Home() {
   const overall = getOverallProgress();
@@ -130,30 +143,22 @@ export default function Home() {
         <div className="px-5">
           <p className="section-label">VISUAL LIBRARY</p>
           <h2 className="mt-1 text-[16px] font-bold text-foreground">図解・動画教材</h2>
-          <p className="mt-1 text-[11px] text-muted">施術理解を深めるビジュアルコンテンツ</p>
+          <p className="mt-1 text-[11px] text-muted">全16種 · AI生成図解ライブラリ</p>
         </div>
         <div className="scrollbar-hide mt-4 flex gap-3 overflow-x-auto px-5 pb-1">
-          {diagrams.map(({ label, type, desc }) => {
-            const img = getDiagramImageUrl(type);
+          {diagramGallery.map(({ type, url }) => {
+            const label = diagramLabels[type] ?? type;
+            const alt = getDiagramPrompt(type).alt;
             return (
-            <div key={label} className="card-soft w-[156px] shrink-0 overflow-hidden">
-              <div className="diagram-frame flex h-[108px] items-center justify-center overflow-hidden p-1">
-                {img ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={img} alt={label} className="h-full w-full object-cover rounded-lg" />
-                ) : (
-                  <DiagramIllustration type={type} />
-                )}
+            <div key={type} className="card-soft w-[148px] shrink-0 overflow-hidden">
+              <div className="diagram-frame h-[108px] overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={url} alt={alt} className="h-full w-full object-cover" />
               </div>
-              <div className="border-t border-border bg-white px-3.5 py-3">
-                <p className="text-[12px] font-bold text-foreground">{label}</p>
-                <p className="mt-0.5 text-[10px] text-muted">{desc}</p>
-                <div className="mt-2 flex items-center gap-1 text-[9px] text-primary">
-                  <svg viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
-                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                  </svg>
-                  図解 + 動画対応予定
-                </div>
+              <div className="border-t border-border bg-white px-3 py-2.5">
+                <p className="text-[11px] font-bold text-foreground">{label}</p>
+                <p className="mt-0.5 line-clamp-2 text-[9px] leading-relaxed text-muted">{alt}</p>
+                <span className="mt-1.5 inline-flex rounded-full bg-primary-muted px-2 py-0.5 text-[8px] font-semibold text-primary">AI図解</span>
               </div>
             </div>
           );})}

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AppShell } from "@/app/components/AppShell";
 import { DiagramArea } from "@/app/components/DiagramArea";
 import { getDiagramPrompt } from "@/lib/content/diagram-prompts";
+import { getDiagramImageUrl } from "@/lib/content/diagram-images";
 import { categories } from "@/lib/data/categories";
 import { getProductBySlug, products } from "@/lib/data/products";
 
@@ -25,8 +26,8 @@ export default async function ProductDetailPage({
     title: product.name,
     alt: promptMeta.alt,
     grokPrompt: promptMeta.grokPrompt,
-    imageUrl: null,
-    status: "placeholder" as const,
+    imageUrl: getDiagramImageUrl(product.diagramType),
+    status: "generated" as const,
   };
 
   const relatedProducts = products.filter((p) => product.relatedProducts.includes(p.slug));

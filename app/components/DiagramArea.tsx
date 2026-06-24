@@ -50,7 +50,7 @@ export function DiagramArea({ diagram, size = "default", showMeta = true }: Prop
             </span>
           </div>
           <p className="text-[10px] leading-relaxed text-muted">{diagram.alt}</p>
-          {diagram.status !== "uploaded" && (
+          {diagram.status === "placeholder" && (
             <div className="rounded-xl bg-primary-muted/40 px-3 py-2">
               <p className="text-[9px] font-semibold text-primary">Grok生成プロンプト（CMS編集可）</p>
               <p className="mt-1 line-clamp-2 text-[9px] leading-relaxed text-muted">
