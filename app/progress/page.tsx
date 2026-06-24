@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AppShell } from "@/app/components/AppShell";
 import { GamificationHUD } from "@/app/components/GamificationHUD";
+import { PageHeader } from "@/app/components/PageHeader";
 import { RecommendedLessons } from "@/app/components/RecommendedLessons";
 import { useProgress } from "@/app/hooks/useProgress";
 import { categories } from "@/lib/data/categories";
@@ -17,7 +18,7 @@ export default function ProgressPage() {
   if (!hydrated) {
     return (
       <AppShell activeNav="progress">
-        <div className="px-5 py-20 text-center text-muted">読み込み中...</div>
+        <div className="page-section py-20 text-center text-muted">読み込み中...</div>
       </AppShell>
     );
   }
@@ -31,71 +32,77 @@ export default function ProgressPage() {
   const nextLesson = getLessonBySlug(progress.nextLessonSlug);
   const nextCategory = categories.find((c) => c.slug === progress.nextLessonSlug);
   const earnedBadges = progress.badges.filter((b) => b.earned);
-  const earnedCerts = progress.certifications.filter((c) => c.earned);
   const weeklyActivity = getWeeklyActivityFromProgress(progress);
 
   return (
     <AppShell activeNav="progress">
-      <section className="px-5 pb-5 pt-7">
-        <p className="section-label">MY JOURNEY</p>
-        <h1 className="mt-2 text-[28px] font-bold tracking-tight text-foreground">学習記録</h1>
-        <p className="mt-2 text-[13px] leading-relaxed text-muted">
-          Lv.{level.level} {level.title} · {progress.xp} XP
-        </p>
+      <PageHeader
+        label="MY JOURNEY"
+        title="学習記録"
+        description={`Lv.${level.level} ${level.title} · ${progress.xp} XP`}
+        action={
+          <Link href="/login" className="badge-muted shrink-0">ログイン</Link>
+        }
+      />
+
+      <section className="page-section pt-0">
+        <GamificationHUD />
       </section>
 
-      <section className="px-5 pb-5"><GamificationHUD /></section>
-
-      <section className="px-5 pb-5">
-        <div className="flex items-end justify-between">
-          <h2 className="text-[16px] font-bold text-foreground">プロフィール</h2>
-          <Link href="/profile" className="text-[11px] font-semibold text-primary">編集 →</Link>
+      <section className="page-section">
+        <div className="section-heading-row">
+          <h2 className="section-title">プロフィール</h2>
+          <Link href="/profile" className="btn-ghost text-[11px]">編集 →</Link>
         </div>
         <p className="mt-1 text-[11px] text-muted">認定証に表示するお名前・サロン名を登録</p>
       </section>
 
-      <section className="px-5 pb-5">
-        <div className="flex items-end justify-between">
-          <h2 className="text-[16px] font-bold text-foreground">必修トレーニング</h2>
-          <Link href="/assignments" className="text-[11px] font-semibold text-primary">すべて →</Link>
+      <section className="page-section">
+        <div className="section-heading-row">
+          <h2 className="section-title">必修トレーニング</h2>
+          <Link href="/assignments" className="btn-ghost text-[11px]">すべて →</Link>
         </div>
         <div className="mt-3"><AssignmentsPanel /></div>
       </section>
 
-      <section className="px-5 pb-5">
-        <div className="card-soft p-4">
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div>
-              <p className="text-[22px] font-bold text-primary">{percent}%</p>
-              <p className="text-[9px] text-muted">Mission進捗</p>
+      <section className="page-section">
+        <div className="card-premium p-4">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="metric-card py-3">
+              <p className="metric-hero-value text-[1.375rem]">{percent}%</p>
+              <p className="metric-label">Mission進捗</p>
             </div>
-            <div>
-              <p className="text-[22px] font-bold text-foreground">{accuracy}%</p>
-              <p className="text-[9px] text-muted">正答率</p>
+            <div className="metric-card py-3">
+              <p className="metric-value text-[1.375rem]">{accuracy}%</p>
+              <p className="metric-label">正答率</p>
             </div>
-            <div>
-              <p className="text-[22px] font-bold text-foreground">{progress.longestStreak}</p>
-              <p className="text-[9px] text-muted">最長連続</p>
+            <div className="metric-card py-3">
+              <p className="metric-value text-[1.375rem]">{progress.longestStreak}</p>
+              <p className="metric-label">最長連続</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="px-5 pb-5">
-        <p className="text-[12px] font-semibold text-foreground">今週の学習</p>
-        <div className="card-soft mt-2 flex items-end justify-between gap-1 px-4 py-4">
+      <section className="page-section">
+        <p className="section-label">WEEKLY ACTIVITY</p>
+        <h2 className="section-title">今週の学習</h2>
+        <div className="card-soft mt-3 flex items-end justify-between gap-1 px-4 py-4">
           {weeklyActivity.map((d) => (
             <div key={d.day} className="flex flex-1 flex-col items-center gap-1">
-              <div className={`w-full rounded-md ${d.active ? "bg-primary" : "bg-primary-muted"}`} style={{ height: d.active ? Math.max(d.minutes, 14) : 6 }} />
+              <div
+                className={`w-full rounded-md transition-all ${d.active ? "bg-primary" : "bg-primary-muted"}`}
+                style={{ height: d.active ? Math.max(d.minutes, 14) : 6 }}
+              />
               <span className={`text-[9px] ${d.active ? "font-semibold text-primary" : "text-muted"}`}>{d.day}</span>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="px-5 pb-5">
+      <section className="page-section">
         <p className="section-label">CERTIFICATION</p>
-        <h2 className="mt-1 text-[16px] font-bold text-foreground">認定制度</h2>
+        <h2 className="section-title">認定制度</h2>
         <div className="mt-3 space-y-3">
           {progress.certifications.map((cert) => (
             <div key={cert.id} className={`card-premium overflow-hidden ${cert.earned ? "" : "opacity-50"}`}>
@@ -109,10 +116,10 @@ export default function ProgressPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-5">
-        <div className="flex items-end justify-between">
-          <h2 className="text-[16px] font-bold text-foreground">バッジ</h2>
-          <span className="text-[11px] text-muted">{earnedBadges.length}/{progress.badges.length}</span>
+      <section className="page-section">
+        <div className="section-heading-row">
+          <h2 className="section-title">バッジ</h2>
+          <span className="badge-muted">{earnedBadges.length}/{progress.badges.length}</span>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-3">
           {progress.badges.map((badge) => (
@@ -125,29 +132,28 @@ export default function ProgressPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-5">
+      <section className="page-section">
         <p className="section-label">NEXT MISSION</p>
         {nextLesson && nextCategory && (
-          <Link href={`/learn/${nextLesson.slug}`} className="card-soft mt-2 block p-4">
+          <Link href={`/learn/${nextLesson.slug}`} className="card-soft card-interactive mt-2 block p-4">
             <p className="text-[15px] font-bold">{nextLesson.title}</p>
             <p className="mt-1 text-[12px] text-muted">{nextLesson.description}</p>
-            <p className="mt-2 text-[11px] font-semibold text-primary">+{nextLesson.xpReward} XP →</p>
+            <p className="btn-ghost mt-2 text-[11px]">+{nextLesson.xpReward} XP →</p>
           </Link>
         )}
         <div className="mt-3"><RecommendedLessons /></div>
       </section>
 
-      <section className="px-5 pb-5">
-        <h2 className="text-[16px] font-bold text-foreground">修了Mission ({progress.completedMissions.length})</h2>
+      <section className="page-section">
+        <h2 className="section-title">修了Mission ({progress.completedMissions.length})</h2>
         <ul className="mt-3 space-y-2">
           {progress.completedMissions.map((slug) => {
             const cat = categories.find((c) => c.slug === slug);
-            const lesson = getLessonBySlug(slug);
             return (
               <li key={slug}>
-                <Link href={`/learn/${slug}`} className="card-soft flex items-center justify-between p-3.5">
+                <Link href={`/learn/${slug}`} className="card-soft card-interactive flex items-center justify-between p-3.5">
                   <p className="text-[13px] font-semibold">{cat?.title}</p>
-                  <span className="text-[10px] font-semibold text-primary">修了</span>
+                  <span className="badge-muted">修了</span>
                 </Link>
               </li>
             );
@@ -158,34 +164,35 @@ export default function ProgressPage() {
         </ul>
       </section>
 
-      <section className="px-5 pb-5">
-        <div className="card-soft p-4">
-          <p className="text-[13px] font-semibold">Quiz最高スコア</p>
-          <p className="mt-1 text-[28px] font-bold">{progress.quizBestScore}点</p>
-          {progress.quizPassed && <span className="mt-2 inline-flex rounded-full bg-primary-muted px-2 py-0.5 text-[10px] font-bold text-primary">合格済</span>}
-          <Link href="/quiz" className="mt-3 flex w-full items-center justify-center rounded-xl bg-primary-muted py-2.5 text-[12px] font-semibold text-primary">理解度テスト</Link>
+      <section className="page-section">
+        <div className="card-premium p-4">
+          <p className="section-label">QUIZ SCORE</p>
+          <p className="metric-hero-value mt-1">{progress.quizBestScore}点</p>
+          {progress.quizPassed && <span className="badge-muted mt-2">合格済</span>}
+          <Link href="/quiz" className="btn-secondary mt-3">理解度テスト</Link>
         </div>
       </section>
 
-      <section className="px-5 pb-5">
+      <section className="page-section">
         <div className="grid grid-cols-2 gap-2">
-          <Link href="/glossary" className="card-soft p-3.5 text-center">
+          <Link href="/glossary" className="card-soft card-interactive p-3.5 text-center">
             <p className="text-[12px] font-bold text-foreground">用語集</p>
             <p className="text-[9px] text-muted">クイックリファレンス</p>
           </Link>
-          <Link href="/help" className="card-soft p-3.5 text-center">
+          <Link href="/help" className="card-soft card-interactive p-3.5 text-center">
             <p className="text-[12px] font-bold text-foreground">ヘルプ</p>
             <p className="text-[9px] text-muted">FAQ・問合せ</p>
           </Link>
         </div>
       </section>
 
-      <section className="px-5 pb-6">
-        <Link href="/admin" className="card-premium block p-5">
+      <section className="page-section pb-6">
+        <Link href="/admin" className="card-premium card-interactive block p-5">
           <p className="section-label">ENTERPRISE</p>
-          <h2 className="mt-1 text-[16px] font-bold text-foreground">教育管理画面 →</h2>
+          <h2 className="section-title">教育管理画面 →</h2>
         </Link>
       </section>
+
       <ComplianceFooter />
     </AppShell>
   );

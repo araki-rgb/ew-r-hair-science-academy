@@ -23,37 +23,37 @@ export default function ProfilePage() {
 
   return (
     <AppShell activeNav="progress">
-      <section className="px-5 pb-5 pt-7">
-        <Link href="/progress" className="text-[13px] font-medium text-primary">← 学習記録</Link>
+      <section className="page-header pb-3">
+        <Link href="/progress" className="back-link">← 学習記録</Link>
         <p className="section-label mt-4">MY PROFILE</p>
-        <h1 className="mt-2 text-[24px] font-bold text-foreground">プロフィール</h1>
-        <p className="mt-2 text-[12px] text-muted">認定証・修了記録に表示される情報を登録</p>
+        <h1 className="page-title">プロフィール</h1>
+        <p className="page-desc">認定証・修了記録に表示される情報を登録</p>
       </section>
 
-      <section className="space-y-4 px-5 pb-6">
-        {([
-          ["name", "お名前", "山田 花子"],
-          ["salonName", "サロン / 会社名", "Hair Studio Aoyama"],
-          ["region", "地域", "東京"],
-          ["jobTitle", "役職", "スタイリスト"],
-        ] as const).map(([key, label, placeholder]) => (
-          <div key={key}>
-            <label className="text-[11px] font-semibold text-foreground">{label}</label>
-            <input
-              value={profile[key]}
-              onChange={(e) => setProfile((p) => ({ ...p, [key]: e.target.value }))}
-              placeholder={placeholder}
-              className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-[14px] outline-none focus:border-primary"
-            />
+      <section className="page-section pt-0">
+        <div className="card-premium p-5">
+          <div className="space-y-4">
+            {([
+              ["name", "お名前", "山田 花子"],
+              ["salonName", "サロン / 会社名", "Hair Studio Aoyama"],
+              ["region", "地域", "東京"],
+              ["jobTitle", "役職", "スタイリスト"],
+            ] as const).map(([key, label, placeholder]) => (
+              <div key={key}>
+                <label className="input-label">{label}</label>
+                <input
+                  value={profile[key]}
+                  onChange={(e) => setProfile((p) => ({ ...p, [key]: e.target.value }))}
+                  placeholder={placeholder}
+                  className="input-field mt-1.5"
+                />
+              </div>
+            ))}
+            <button type="button" onClick={handleSave} className="btn-primary">
+              {saved ? "保存しました ✓" : "保存する"}
+            </button>
           </div>
-        ))}
-        <button
-          type="button"
-          onClick={handleSave}
-          className="flex w-full items-center justify-center rounded-2xl bg-primary py-3.5 text-[14px] font-semibold text-white"
-        >
-          {saved ? "保存しました ✓" : "保存する"}
-        </button>
+        </div>
       </section>
     </AppShell>
   );

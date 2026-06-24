@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/app/components/AppShell";
 import { ModeToggle, useUserMode } from "@/app/components/ModeToggle";
+import { PageHeader } from "@/app/components/PageHeader";
 import { aiPrompts } from "@/lib/data/ai-prompts";
 import type { AIConsultationMode } from "@/lib/types";
 
@@ -84,16 +85,14 @@ export default function AIPage() {
 
   return (
     <AppShell activeNav="ai">
-      <section className="px-5 pb-4 pt-7">
-        <p className="section-label">AI ASSISTANT</p>
-        <h1 className="mt-2 text-[26px] font-bold tracking-tight text-foreground">AI先生</h1>
-        <p className="mt-2 text-[13px] leading-relaxed text-muted">
-          施術・薬剤・営業・商品の相談に対応。ナレッジベース連携済み、LLM接続準備完了。
-        </p>
-        <div className="mt-4"><ModeToggle /></div>
-      </section>
+      <PageHeader
+        label="AI ASSISTANT"
+        title="AI先生"
+        description="施術・薬剤・営業・商品の相談に対応。ナレッジベース連携済み、LLM接続準備完了。"
+      />
 
-      <section className="px-5 pb-4">
+      <section className="page-section pt-0 space-y-4">
+        <ModeToggle />
         <p className="text-[11px] font-semibold text-foreground">相談カテゴリ</p>
         <div className="mt-2 grid grid-cols-2 gap-2">
           {CONSULTATION_MODES.map((m) => (
@@ -102,7 +101,7 @@ export default function AIPage() {
               type="button"
               onClick={() => { setConsultMode(m.key); setResponse(null); setError(null); }}
               className={`card-soft p-3 text-left transition ${
-                mode === m.key ? "ring-2 ring-primary/25 bg-primary-muted/30" : ""
+                mode === m.key ? "ring-2 ring-primary/20 bg-primary-muted/40" : ""
               }`}
             >
               <span className="text-[16px]">{m.icon}</span>
@@ -113,8 +112,9 @@ export default function AIPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-3">
-        <p className="text-[11px] font-semibold text-foreground">よくある相談</p>
+      <section className="page-section">
+        <p className="section-label">QUICK ASK</p>
+        <h2 className="section-title">よくある相談</h2>
         <div className="mt-2 space-y-2">
           {filtered.map((p) => (
             <button
@@ -122,7 +122,7 @@ export default function AIPage() {
               type="button"
               onClick={() => handleConsult(p.id)}
               disabled={loading}
-              className="card-soft w-full p-3.5 text-left disabled:opacity-60"
+              className="card-soft card-interactive w-full p-3.5 text-left disabled:opacity-60"
             >
               <p className="text-[12px] font-semibold text-foreground">{p.question}</p>
               <p className="mt-1 text-[10px] text-muted">{p.category}</p>
@@ -131,20 +131,16 @@ export default function AIPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-3 min-h-[240px]">
+      <section className="page-section min-h-[240px]">
         {loading ? (
           <div className="card-soft flex items-center gap-3 p-5">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             <p className="text-[13px] text-muted">AI先生が回答を準備中...</p>
           </div>
         ) : error ? (
-          <div className="card-soft border border-[#e8b4b4] bg-[#fdf2f2] p-4">
-            <p className="text-[13px] font-semibold text-[#9b3b3b]">{error}</p>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              className="mt-3 text-[12px] font-semibold text-primary"
-            >
+          <div className="card-soft border border-[var(--danger-muted)] bg-[var(--danger-muted)] p-4">
+            <p className="text-[13px] font-semibold text-[var(--danger)]">{error}</p>
+            <button type="button" onClick={handleSubmit} className="btn-ghost mt-3">
               再試行 →
             </button>
           </div>
@@ -164,15 +160,15 @@ export default function AIPage() {
               <div className="chat-bubble-ai card-soft flex-1 p-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="text-[10px] font-bold text-primary">AI ASSISTANT</p>
-                  <span className="rounded-full bg-primary-muted px-2 py-0.5 text-[9px] font-medium text-primary">
+                  <span className="badge-muted">
                     {userMode === "hairdresser" ? "美容師向け" : "ディーラー向け"}
                   </span>
                   {response.consultationMode && (
-                    <span className="rounded-full bg-background px-2 py-0.5 text-[9px] text-muted">
+                    <span className="badge-muted">
                       {CONSULTATION_MODES.find((m) => m.key === response.consultationMode)?.label}
                     </span>
                   )}
-                  <span className="rounded-full bg-gold-muted px-2 py-0.5 text-[9px] font-medium text-gold">
+                  <span className="badge-gold">
                     {response.source === "llm-rag" ? "LLM+RAG" : response.source === "rag" ? "RAG" : "フォールバック"}
                   </span>
                 </div>
@@ -208,12 +204,12 @@ export default function AIPage() {
                 )}
                 <div className="mt-3 flex flex-wrap gap-2">
                   {response.relatedLesson && (
-                    <Link href={`/learn/${response.relatedLesson}`} className="text-[11px] font-semibold text-primary">
+                    <Link href={`/learn/${response.relatedLesson}`} className="btn-ghost text-[11px]">
                       関連Mission →
                     </Link>
                   )}
                   {response.relatedProduct && (
-                    <Link href={`/products/${response.relatedProduct}`} className="text-[11px] font-semibold text-primary">
+                    <Link href={`/products/${response.relatedProduct}`} className="btn-ghost text-[11px]">
                       関連製品 →
                     </Link>
                   )}
@@ -229,11 +225,9 @@ export default function AIPage() {
         )}
       </section>
 
-      <section className="sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] border-t border-border bg-white/95 px-5 py-3 backdrop-blur-lg">
-        <div className="mb-2 rounded-xl bg-primary-muted/40 px-3 py-2">
-          <p className="text-[9px] text-muted">
-            ✅ ナレッジベースAPI接続済み · LLM差し替え対応 · RAG教材連携準備完了
-          </p>
+      <section className="sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] border-t border-border bg-white/95 px-[var(--page-x)] py-3 backdrop-blur-lg">
+        <div className="compliance-note mb-2 py-2.5">
+          ナレッジベースAPI接続済み · LLM差し替え対応 · RAG教材連携準備完了
         </div>
         <div className="flex gap-2">
           <input
@@ -242,13 +236,13 @@ export default function AIPage() {
             onKeyDown={(e) => e.key === "Enter" && !loading && handleSubmit()}
             placeholder={`${CONSULTATION_MODES.find((m) => m.key === mode)?.label}について質問...`}
             disabled={loading}
-            className="flex-1 rounded-2xl border border-border bg-background px-4 py-3 text-[13px] outline-none focus:border-primary disabled:opacity-60"
+            className="input-field flex-1"
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={loading || !input.trim()}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-white disabled:opacity-50"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-[var(--shadow-primary)] transition active:scale-95 disabled:opacity-50"
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />

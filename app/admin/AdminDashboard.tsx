@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { PageHeader } from "@/app/components/PageHeader";
 import { adminDashboard } from "@/lib/data/admin";
 import { defaultAssignments } from "@/lib/data/assignments";
 
@@ -39,49 +40,60 @@ export function AdminDashboard() {
 
   return (
     <>
-      <section className="px-5 pb-5 pt-7">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="section-label">ADMIN DASHBOARD</p>
-            <h1 className="mt-2 text-[26px] font-bold tracking-tight text-foreground">教育管理</h1>
-            <p className="mt-2 text-[13px] leading-relaxed text-muted">
-              受講状況・修了率・理解度を一元管理。企業導入時の管理者画面イメージ。
-            </p>
-          </div>
-          <span className="rounded-full bg-gold-muted px-2.5 py-1 text-[9px] font-bold text-gold">DEMO</span>
+      <PageHeader
+        label="ADMIN DASHBOARD"
+        title="教育管理"
+        description="受講状況・修了率・理解度を一元管理。企業導入時の管理者画面イメージ。"
+        badge="DEMO"
+      />
+
+      <section className="page-section pt-0">
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { label: "受講者", value: overview.totalLearners, unit: "名", highlight: true },
+            { label: "今週アクティブ", value: overview.activeThisWeek, unit: "名", highlight: false },
+            { label: "平均進捗", value: overview.avgProgress, unit: "%", highlight: true },
+            { label: "修了率", value: overview.completionRate, unit: "%", highlight: true },
+            { label: "平均正答率", value: overview.avgAccuracy, unit: "%", highlight: false },
+            { label: "総獲得XP", value: overview.totalXpEarned.toLocaleString(), unit: "", highlight: false },
+          ].map((s) => (
+            <div key={s.label} className="admin-kpi">
+              <p className={`admin-kpi-value ${s.highlight ? "text-primary" : ""}`}>
+                {s.value}
+                {s.unit && <span className="text-[11px] font-medium text-muted">{s.unit}</span>}
+              </p>
+              <p className="admin-kpi-label">{s.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="px-5 pb-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-[15px] font-bold text-foreground">必修アサイン管理</h2>
-          <span className="text-[10px] text-muted">{defaultAssignments.filter((a) => a.mandatory).length}件 必修</span>
+      <section className="page-section">
+        <div className="section-heading-row">
+          <h2 className="section-title">必修アサイン管理</h2>
+          <span className="badge-muted">{defaultAssignments.filter((a) => a.mandatory).length}件 必修</span>
         </div>
-        <div className="mt-2 space-y-2">
+        <div className="mt-3 space-y-2">
           {defaultAssignments.map((a) => (
-            <div key={a.id} className="card-soft flex items-center justify-between p-3">
+            <div key={a.id} className="card-soft flex items-center justify-between p-3.5">
               <div>
                 <p className="text-[12px] font-semibold text-foreground">{a.title}</p>
-                <p className="text-[9px] text-muted">{a.assignedBy} · 期限 {a.deadline}</p>
+                <p className="mt-0.5 text-[9px] text-muted">{a.assignedBy} · 期限 {a.deadline}</p>
               </div>
-              <span className={`rounded-full px-2 py-0.5 text-[8px] font-bold ${a.mandatory ? "bg-gold-muted text-gold" : "bg-primary-muted text-primary"}`}>
+              <span className={a.mandatory ? "badge-gold" : "badge-muted"}>
                 {a.mandatory ? "必修" : "任意"}
               </span>
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={exportCsv}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-primary/20 py-3 text-[13px] font-semibold text-primary"
-        >
+        <button type="button" onClick={exportCsv} className="btn-secondary mt-3">
           学習レポートをCSV出力
         </button>
       </section>
 
-      <section className="px-5 pb-4">
+      <section className="page-section">
         <div className="grid grid-cols-2 gap-2">
-          <Link href="/admin/cms" className="card-soft flex items-center gap-3 p-3.5 transition active:scale-[0.99]">
+          <Link href="/admin/cms" className="card-soft card-interactive flex items-center gap-3 p-3.5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-muted text-primary">
               <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
                 <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
@@ -93,7 +105,7 @@ export function AdminDashboard() {
               <p className="text-[10px] text-muted">教材・製品・図解</p>
             </div>
           </Link>
-          <Link href="/products/compare" className="card-soft flex items-center gap-3 p-3.5 transition active:scale-[0.99]">
+          <Link href="/products/compare" className="card-soft card-interactive flex items-center gap-3 p-3.5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-muted text-gold">
               <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
                 <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
@@ -107,38 +119,15 @@ export function AdminDashboard() {
         </div>
       </section>
 
-      <section className="px-5 pb-5">
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { label: "受講者", value: overview.totalLearners, unit: "名" },
-            { label: "今週アクティブ", value: overview.activeThisWeek, unit: "名" },
-            { label: "平均進捗", value: overview.avgProgress, unit: "%" },
-            { label: "修了率", value: overview.completionRate, unit: "%" },
-            { label: "平均正答率", value: overview.avgAccuracy, unit: "%" },
-            { label: "総獲得XP", value: overview.totalXpEarned.toLocaleString(), unit: "" },
-          ].map((s) => (
-            <div key={s.label} className="card-soft p-3.5">
-              <p className="text-[20px] font-bold text-foreground">
-                {s.value}
-                <span className="text-[11px] font-medium text-muted">{s.unit}</span>
-              </p>
-              <p className="mt-0.5 text-[10px] text-muted">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="px-5 pb-4">
+      <section className="page-section">
         <p className="text-[11px] font-semibold text-foreground">地域フィルタ</p>
-        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
+        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
           {REGIONS.map((r) => (
             <button
               key={r}
               type="button"
               onClick={() => setRegionFilter(r)}
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-semibold transition ${
-                regionFilter === r ? "bg-primary text-white" : "bg-primary-muted text-primary"
-              }`}
+              className={`filter-pill ${regionFilter === r ? "active" : ""}`}
             >
               {r}
             </button>
@@ -146,8 +135,8 @@ export function AdminDashboard() {
         </div>
       </section>
 
-      <section className="px-5 pb-4">
-        <div className="flex gap-1 rounded-2xl bg-primary-muted/50 p-1">
+      <section className="page-section">
+        <div className="tab-switcher">
           {([
             ["stores", "店舗別"],
             ["reps", "営業担当"],
@@ -156,9 +145,7 @@ export function AdminDashboard() {
               key={key}
               type="button"
               onClick={() => setActiveTab(key)}
-              className={`flex-1 rounded-xl py-2 text-[12px] font-semibold ${
-                activeTab === key ? "bg-primary text-white" : "text-muted"
-              }`}
+              className={activeTab === key ? "active" : ""}
             >
               {label}
             </button>
@@ -167,8 +154,8 @@ export function AdminDashboard() {
       </section>
 
       {activeTab === "stores" && (
-        <section className="px-5 pb-5">
-          <h2 className="text-[15px] font-bold text-foreground">
+        <section className="page-section">
+          <h2 className="section-title">
             店舗別 · 学習状況
             <span className="ml-2 text-[11px] font-medium text-muted">({filteredStores.length}件)</span>
           </h2>
@@ -185,8 +172,8 @@ export function AdminDashboard() {
                     <p className="text-[9px] text-muted">修了 {store.completionRate}%</p>
                   </div>
                 </div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-primary-muted">
-                  <div className="h-full rounded-full bg-primary" style={{ width: `${store.progress}%` }} />
+                <div className="progress-track progress-glow mt-2">
+                  <div className="progress-fill" style={{ width: `${store.progress}%` }} />
                 </div>
               </div>
             ))}
@@ -198,8 +185,8 @@ export function AdminDashboard() {
       )}
 
       {activeTab === "reps" && (
-        <section className="px-5 pb-5">
-          <h2 className="text-[15px] font-bold text-foreground">
+        <section className="page-section">
+          <h2 className="section-title">
             営業担当別
             <span className="ml-2 text-[11px] font-medium text-muted">({filteredReps.length}名)</span>
           </h2>
@@ -223,8 +210,9 @@ export function AdminDashboard() {
         </section>
       )}
 
-      <section className="px-5 pb-5">
-        <h2 className="text-[15px] font-bold text-foreground">人気Mission</h2>
+      <section className="page-section">
+        <p className="section-label">INSIGHTS</p>
+        <h2 className="section-title">人気Mission</h2>
         <div className="mt-3 space-y-2">
           {popularLessons.map((lesson, i) => (
             <div key={lesson.slug} className="card-soft flex items-center gap-3 p-3.5">
@@ -240,21 +228,24 @@ export function AdminDashboard() {
         </div>
       </section>
 
-      <section className="px-5 pb-6">
-        <h2 className="text-[15px] font-bold text-foreground">苦手分野 · 理解度</h2>
+      <section className="page-section pb-8">
+        <h2 className="section-title">苦手分野 · 理解度</h2>
         <div className="mt-3 space-y-2">
           {weakAreas.map((area) => (
             <div key={area.topic} className="card-soft p-3.5">
               <div className="flex items-center justify-between">
                 <p className="text-[12px] font-semibold text-foreground">{area.topic}</p>
-                <p className={`text-[14px] font-bold ${area.accuracy < 60 ? "text-[#9b3b3b]" : "text-primary"}`}>
+                <p className={`text-[14px] font-bold ${area.accuracy < 60 ? "text-[var(--danger)]" : "text-primary"}`}>
                   {area.accuracy}%
                 </p>
               </div>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-primary-muted">
+              <div className="progress-track mt-2">
                 <div
-                  className={`h-full rounded-full ${area.accuracy < 60 ? "bg-[#e8b4b4]" : "bg-primary"}`}
-                  style={{ width: `${area.accuracy}%` }}
+                  className="progress-fill"
+                  style={{
+                    width: `${area.accuracy}%`,
+                    background: area.accuracy < 60 ? "#e8b4b4" : undefined,
+                  }}
                 />
               </div>
               <p className="mt-1 text-[9px] text-muted">{area.attempts}回の回答</p>
@@ -263,8 +254,8 @@ export function AdminDashboard() {
         </div>
       </section>
 
-      <section className="px-5 pb-6">
-        <Link href="/progress" className="flex w-full items-center justify-center rounded-2xl border border-border py-3.5 text-[13px] font-semibold text-muted">
+      <section className="page-section pb-8">
+        <Link href="/progress" className="btn-secondary">
           学習者画面に戻る
         </Link>
       </section>

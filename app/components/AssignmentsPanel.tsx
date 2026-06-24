@@ -6,11 +6,11 @@ import { defaultAssignments, resolveAssignmentStatus } from "@/lib/data/assignme
 import { useProgress } from "@/app/hooks/useProgress";
 import { useUserMode } from "./ModeToggle";
 
-const statusStyle = {
-  completed: "bg-primary-muted text-primary",
-  "in-progress": "bg-primary text-white",
-  pending: "bg-background text-muted",
-  overdue: "bg-[#fdf2f2] text-[#9b3b3b]",
+const statusBadge = {
+  completed: "badge-muted",
+  "in-progress": "badge-primary",
+  pending: "badge-muted opacity-60",
+  overdue: "badge-danger",
 };
 
 const statusLabel = {
@@ -34,17 +34,17 @@ export function AssignmentsPanel({ compact = false }: { compact?: boolean }) {
 
   if (compact) {
     return (
-      <Link href="/assignments" className="card-soft flex items-center justify-between p-4">
+      <Link href="/assignments" className="card-soft card-interactive flex items-center justify-between p-4">
         <div>
           <p className="text-[13px] font-bold text-foreground">必修トレーニング</p>
           <p className="mt-0.5 text-[11px] text-muted">教育本部からのアサイン</p>
         </div>
         {mandatoryPending > 0 ? (
-          <span className="flex h-7 min-w-7 items-center justify-center rounded-full bg-[#9b3b3b] px-2 text-[11px] font-bold text-white">
+          <span className="flex h-7 min-w-7 items-center justify-center rounded-full bg-[var(--danger)] px-2 text-[11px] font-bold text-white">
             {mandatoryPending}
           </span>
         ) : (
-          <span className="text-[11px] font-semibold text-primary">完了 ✓</span>
+          <span className="badge-muted">完了 ✓</span>
         )}
       </Link>
     );
@@ -56,16 +56,16 @@ export function AssignmentsPanel({ compact = false }: { compact?: boolean }) {
         <Link
           key={a.id}
           href={a.slug === "quiz" ? "/quiz" : `/learn/${a.slug}`}
-          className="card-soft flex items-center justify-between p-3.5"
+          className="card-soft card-interactive flex items-center justify-between p-3.5"
         >
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <p className="text-[13px] font-semibold text-foreground">{a.title}</p>
-              {a.mandatory && <span className="rounded bg-gold-muted px-1.5 py-0.5 text-[8px] font-bold text-gold">必修</span>}
+              {a.mandatory && <span className="badge-gold">必修</span>}
             </div>
             <p className="mt-0.5 text-[10px] text-muted">期限 {a.deadline} · {a.assignedBy}</p>
           </div>
-          <span className={`shrink-0 rounded-full px-2.5 py-1 text-[9px] font-bold ${statusStyle[a.status]}`}>
+          <span className={`shrink-0 ${statusBadge[a.status]}`}>
             {statusLabel[a.status]}
           </span>
         </Link>

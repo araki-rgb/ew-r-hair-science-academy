@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AppShell } from "@/app/components/AppShell";
 import { CategoryIcon } from "@/app/components/CategoryIcon";
 import { ModeToggle, useUserMode } from "@/app/components/ModeToggle";
+import { PageHeader } from "@/app/components/PageHeader";
 import { RecommendedLessons } from "@/app/components/RecommendedLessons";
 import { RoadmapTimeline } from "@/app/components/RoadmapTimeline";
 import { categories } from "@/lib/data/categories";
@@ -31,33 +32,28 @@ export default function LearnPage() {
 
   return (
     <AppShell activeNav="learn">
-      <section className="relative overflow-hidden px-5 pb-5 pt-7">
-        <div className="pointer-events-none absolute -right-8 -top-4 h-32 w-32 rounded-full bg-primary-muted/70 blur-2xl" />
-        <p className="section-label">MISSION CENTER</p>
-        <h1 className="mt-2 text-[28px] font-bold tracking-tight text-foreground">Mission</h1>
-        <p className="mt-3 text-[14px] leading-relaxed text-muted">
-          現場シーンから始まるストーリー型学習。8つのMissionで提案力を育てます。
-        </p>
-        <div className="mt-5">
-          <ModeToggle />
-        </div>
-      </section>
+      <PageHeader
+        label="MISSION CENTER"
+        title="Mission"
+        description="現場シーンから始まるストーリー型学習。8つのMissionで提案力を育てます。"
+      />
 
-      <section className="px-5 pb-5">
+      <section className="page-section pt-0 space-y-4">
+        <ModeToggle />
         <ProgressSummary />
       </section>
 
-      <section className="px-5 pb-6">
-        <div className="flex items-end justify-between">
-          <h2 className="text-[16px] font-bold text-foreground">必修トレーニング</h2>
-          <Link href="/assignments" className="text-[11px] font-semibold text-primary">すべて →</Link>
+      <section className="page-section">
+        <div className="section-heading-row">
+          <h2 className="section-title">必修トレーニング</h2>
+          <Link href="/assignments" className="btn-ghost text-[11px]">すべて →</Link>
         </div>
         <div className="mt-3"><AssignmentsPanel compact /></div>
       </section>
 
-      <section className="px-5 pb-8">
+      <section className="page-section">
         <p className="section-label">ROADMAP</p>
-        <h2 className="mt-1 text-[16px] font-bold text-foreground">
+        <h2 className="section-title">
           {mode === "hairdresser" ? "美容師" : "ディーラー"}学習ロードマップ
         </h2>
         <div className="mt-4">
@@ -65,20 +61,20 @@ export default function LearnPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-8">
+      <section className="page-section">
         <p className="section-label">RECOMMENDED</p>
-        <h2 className="mt-1 text-[16px] font-bold text-foreground">目的別おすすめ</h2>
+        <h2 className="section-title">目的別おすすめ</h2>
         <div className="mt-3">
           <RecommendedLessons />
         </div>
       </section>
 
-      <section className="px-5 pb-8">
-        <div className="flex items-end justify-between">
-          <h2 className="text-[16px] font-bold text-foreground">
+      <section className="page-section">
+        <div className="section-heading-row">
+          <h2 className="section-title">
             {mode === "hairdresser" ? "美容師向け" : "ディーラー向け"}コース
           </h2>
-          <span className="text-[11px] text-muted">{filteredCategories.length}コース</span>
+          <span className="badge-muted">{filteredCategories.length}コース</span>
         </div>
         <div className="mt-4 space-y-4">
           {filteredCategories.map((cat) => {
@@ -92,10 +88,10 @@ export default function LearnPage() {
                     className="w-1 shrink-0"
                     style={{
                       background: completed
-                        ? "linear-gradient(to bottom, #1b7a5a, #4db88a)"
+                        ? "linear-gradient(to bottom, var(--primary), var(--accent))"
                         : missionProgress > 0
-                          ? "linear-gradient(to bottom, #1b7a5a, #e4f2ec)"
-                          : "#e4f2ec",
+                          ? "linear-gradient(to bottom, var(--primary), var(--primary-muted))"
+                          : "var(--primary-muted)",
                     }}
                   />
                   <div className="flex-1 p-4">
@@ -105,17 +101,11 @@ export default function LearnPage() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="rounded-md bg-primary px-2 py-0.5 text-[10px] font-bold text-white">
-                            Level {cat.level}
-                          </span>
+                          <span className="badge-primary">Level {cat.level}</span>
                           <span className="text-[10px] font-medium text-muted">
                             {lesson?.questions.length ?? 5} Questions
                           </span>
-                          {completed && (
-                            <span className="rounded-full bg-primary-muted px-2 py-0.5 text-[9px] font-semibold text-primary">
-                              修了
-                            </span>
-                          )}
+                          {completed && <span className="badge-muted">修了</span>}
                         </div>
                         <h3 className="mt-1.5 text-[15px] font-bold text-foreground">{cat.title}</h3>
                         <p className="mt-1.5 text-[12px] leading-relaxed text-muted">{cat.description}</p>
@@ -125,19 +115,12 @@ export default function LearnPage() {
                       <span className="text-muted">{cat.duration}</span>
                       <span className="font-semibold text-primary">{missionProgress}%</span>
                     </div>
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-primary-muted">
-                      <div
-                        className="h-full rounded-full bg-primary transition-all duration-500"
-                        style={{ width: `${missionProgress}%` }}
-                      />
+                    <div className="progress-track progress-glow mt-2">
+                      <div className="progress-fill" style={{ width: `${missionProgress}%` }} />
                     </div>
                     <Link
                       href={`/learn/${cat.slug}`}
-                      className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-[13px] font-semibold transition active:scale-[0.98] ${
-                        missionProgress > 0
-                          ? "bg-primary text-white shadow-[0_6px_16px_-4px_rgb(27_122_90/0.35)]"
-                          : "border border-primary/20 bg-white text-primary"
-                      }`}
+                      className={missionProgress > 0 ? "btn-primary mt-4" : "btn-secondary mt-4"}
                     >
                       {missionProgress > 0 && !completed ? "続きから進む" : completed ? "復習する" : "Lessonへ進む"}
                       <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
@@ -152,41 +135,34 @@ export default function LearnPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-5">
-        <Link href="/glossary" className="card-soft flex items-center justify-between p-4">
+      <section className="page-section">
+        <Link href="/glossary" className="card-soft card-interactive flex items-center justify-between p-4">
           <div>
             <p className="text-[13px] font-bold text-foreground">用語集</p>
             <p className="text-[10px] text-muted">ケラチン・キューティクル等のクイックリファレンス</p>
           </div>
-          <span className="text-[11px] font-semibold text-primary">→</span>
+          <span className="btn-ghost text-[11px]">→</span>
         </Link>
       </section>
 
-      <section className="px-5 pb-6">
-        <h2 className="text-[16px] font-bold text-foreground">今日の1問</h2>
+      <section className="page-section pb-8">
+        <h2 className="section-title">今日の1問</h2>
         <div className="card-soft mt-3 p-5">
-          <span className="inline-flex rounded-lg bg-primary-muted px-2.5 py-1 text-[10px] font-semibold text-primary">
-            QUICK CHECK · Level 1
-          </span>
+          <span className="badge-muted">QUICK CHECK · Level 1</span>
           <p className="mt-4 text-[15px] font-bold leading-snug text-foreground">
             Q. 髪の主成分は何ですか？
           </p>
           <ul className="mt-4 space-y-2.5">
             {quizOptions.map((option) => (
               <li key={option.key}>
-                <div className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-[12px] font-bold text-primary shadow-sm">
-                    {option.key}
-                  </span>
+                <div className="choice-btn pointer-events-none">
+                  <span className="choice-letter">{option.key}</span>
                   <span className="text-[13px] font-medium text-foreground">{option.label}</span>
                 </div>
               </li>
             ))}
           </ul>
-          <Link
-            href="/learn/hair-basic"
-            className="mt-4 flex w-full items-center justify-center rounded-xl bg-primary-muted py-3 text-[12px] font-semibold text-primary"
-          >
+          <Link href="/learn/hair-basic" className="btn-secondary mt-4">
             Lessonで回答する
           </Link>
         </div>

@@ -17,26 +17,26 @@ export function AppShell({
   const { user, hydrated, logout } = useAuth();
 
   return (
-    <div className="mx-auto min-h-dvh w-full max-w-[430px] bg-white shadow-[0_0_0_1px_#dce8e3] md:my-6 md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem] md:shadow-[0_28px_64px_-24px_rgb(27_122_90/0.2)]">
+    <div className="shell-device mx-auto min-h-dvh w-full max-w-[430px]">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-white">
         メインコンテンツへスキップ
       </a>
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border/80 bg-white/92 px-5 py-3.5 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border/60 bg-white/90 px-5 py-3 backdrop-blur-xl md:rounded-t-[2rem]">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-[0_4px_12px_-2px_rgb(27_122_90/0.4)]">
-            <span className="text-[10px] font-bold tracking-tight text-white">EW-R</span>
+          <div className="flex h-9 w-9 items-center justify-center rounded-[0.65rem] bg-gradient-to-br from-primary to-primary-dark shadow-[0_4px_14px_-4px_rgb(26_117_86/0.5)]">
+            <span className="text-[9px] font-bold tracking-tight text-white">EW-R</span>
           </div>
           <div className="leading-tight">
-            <p className="text-[13px] font-semibold tracking-tight text-foreground">Hair Science Academy</p>
-            <p className="text-[9px] font-medium tracking-[0.14em] text-primary">LEARNING PLATFORM</p>
+            <p className="text-[12px] font-semibold tracking-tight text-foreground">Hair Science Academy</p>
+            <p className="text-[8px] font-medium tracking-[0.16em] text-primary">LEARNING PLATFORM</p>
           </div>
         </Link>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="検索"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-muted text-primary"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-border-subtle bg-white text-primary shadow-[var(--shadow-xs)] transition active:scale-95"
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
               <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
@@ -46,13 +46,13 @@ export function AppShell({
             <button
               type="button"
               onClick={() => logout()}
-              className="max-w-[100px] truncate rounded-full bg-primary-muted px-3 py-1.5 text-[10px] font-semibold text-primary"
+              className="max-w-[5.5rem] truncate rounded-full border border-primary/15 bg-primary-muted px-3 py-1.5 text-[10px] font-semibold text-primary"
               title={user.email}
             >
               {user.name}
             </button>
           ) : (
-            <Link href="/login" className="rounded-full bg-primary-muted px-3 py-1.5 text-[10px] font-semibold text-primary">
+            <Link href="/login" className="rounded-full border border-primary/15 bg-primary-muted px-3 py-1.5 text-[10px] font-semibold text-primary">
               ログイン
             </Link>
           )}
