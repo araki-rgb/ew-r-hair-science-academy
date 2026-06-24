@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { adminDashboard } from "@/lib/data/admin";
+import { defaultAssignments } from "@/lib/data/assignments";
 
 const REGIONS = ["すべて", "東京", "関西", "中部", "九州"] as const;
 
@@ -21,6 +22,21 @@ export function AdminDashboard() {
     [salesReps, regionFilter],
   );
 
+  const exportCsv = () => {
+    const rows = [
+      ["店舗", "地域", "受講者数", "進捗%", "修了率%"],
+      ...filteredStores.map((s) => [s.name, s.region, s.learners, s.progress, s.completionRate]),
+    ];
+    const csv = rows.map((r) => r.join(",")).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ewr-learning-report.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <>
       <section className="px-5 pb-5 pt-7">
@@ -34,6 +50,33 @@ export function AdminDashboard() {
           </div>
           <span className="rounded-full bg-gold-muted px-2.5 py-1 text-[9px] font-bold text-gold">DEMO</span>
         </div>
+      </section>
+
+      <section className="px-5 pb-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-[15px] font-bold text-foreground">必修アサイン管理</h2>
+          <span className="text-[10px] text-muted">{defaultAssignments.filter((a) => a.mandatory).length}件 必修</span>
+        </div>
+        <div className="mt-2 space-y-2">
+          {defaultAssignments.map((a) => (
+            <div key={a.id} className="card-soft flex items-center justify-between p-3">
+              <div>
+                <p className="text-[12px] font-semibold text-foreground">{a.title}</p>
+                <p className="text-[9px] text-muted">{a.assignedBy} · 期限 {a.deadline}</p>
+              </div>
+              <span className={`rounded-full px-2 py-0.5 text-[8px] font-bold ${a.mandatory ? "bg-gold-muted text-gold" : "bg-primary-muted text-primary"}`}>
+                {a.mandatory ? "必修" : "任意"}
+              </span>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={exportCsv}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-primary/20 py-3 text-[13px] font-semibold text-primary"
+        >
+          学習レポートをCSV出力
+        </button>
       </section>
 
       <section className="px-5 pb-4">

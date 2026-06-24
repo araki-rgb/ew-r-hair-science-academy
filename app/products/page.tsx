@@ -43,7 +43,7 @@ export default function ProductsPage() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[14px] font-bold text-foreground">OXLON 製品比較</p>
-            <p className="mt-0.5 text-[11px] text-muted">3% · 6% · After Break を横並びで比較</p>
+            <p className="mt-0.5 text-[11px] text-muted">3% · 6% · 9% · After Break 比較</p>
           </div>
           <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0 text-primary">
             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
@@ -176,6 +176,21 @@ export default function ProductsPage() {
             </Link>
           ))}
         </div>
+      </section>
+
+      <section className="px-5 pb-5">
+        <Link href="/sales-toolkit" className="card-soft flex items-center gap-4 p-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-muted text-primary">
+            <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+              <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-[14px] font-bold text-foreground">営業ツールキット</p>
+            <p className="text-[11px] text-muted">反論処理 · 訪問チェックリスト</p>
+          </div>
+        </Link>
       </section>
 
       <section className="px-5 pb-6">

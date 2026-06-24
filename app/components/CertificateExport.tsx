@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Mission } from "@/lib/types";
+import { getDisplayName, loadProfile } from "@/lib/storage/profile-store";
+import { trackEvent } from "@/lib/analytics/events";
 
 type Props = {
   mission: Mission;
@@ -8,7 +11,15 @@ type Props = {
   userName?: string;
 };
 
-export function CertificateExport({ mission, accuracy, userName = "受講者" }: Props) {
+export function CertificateExport({ mission, accuracy, userName }: Props) {
+  const [name, setName] = useState(userName ?? "受講者");
+
+  useEffect(() => {
+    if (!userName) setName(getDisplayName(loadProfile()));
+    const handler = () => setName(getDisplayName(loadProfile()));
+    window.addEventListener("ewr-profile-change", handler);
+    return () => window.removeEventListener("ewr-profile-change", handler);
+  }, [userName]);
   const date = new Date().toLocaleDateString("ja-JP", {
     year: "numeric",
     month: "2-digit",
@@ -55,7 +66,7 @@ export function CertificateExport({ mission, accuracy, userName = "受講者" }:
 
     ctx.fillStyle = "#5f726c";
     ctx.font="16px sans-serif";
-    ctx.fillText(`${userName} 様`, 400, 270);
+    ctx.fillText(`${name} 様`, 400, 270);
 
     ctx.font = "14px sans-serif";
     ctx.fillText(`正答率 ${accuracy}% · ${date} 修了`, 400, 310);
@@ -72,6 +83,8 @@ export function CertificateExport({ mission, accuracy, userName = "受講者" }:
     ctx.stroke();
     ctx.font = "11px sans-serif";
     ctx.fillText("EW-R株式会社 Hair Science Academy", 400, 450);
+
+    trackEvent("cert_download", { mission: mission.slug, accuracy });
 
     canvas.toBlob((blob) => {
       if (!blob) return;

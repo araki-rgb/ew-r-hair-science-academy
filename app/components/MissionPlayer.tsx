@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Mission, MissionQuestion } from "@/lib/types";
 import { XP_REWARDS } from "@/lib/data/gamification";
+import { trackEvent } from "@/lib/analytics/events";
 import { completeMission, loadProgress } from "@/lib/storage/progress-store";
 import { CertificateExport } from "./CertificateExport";
 import { DiagramArea } from "./DiagramArea";
@@ -160,6 +161,7 @@ export function MissionPlayer({ mission, nextMission }: Props) {
       setSessionXp(finalXp);
       if (!saved) {
         completeMission(loadProgress(), mission.slug, finalXp, finalAccuracy);
+        trackEvent("mission_complete", { slug: mission.slug, accuracy: finalAccuracy });
         setSaved(true);
       }
       setStep("complete");

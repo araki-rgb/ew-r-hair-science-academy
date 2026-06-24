@@ -7,7 +7,9 @@ import { RecommendedLessons } from "@/app/components/RecommendedLessons";
 import { useProgress } from "@/app/hooks/useProgress";
 import { categories } from "@/lib/data/categories";
 import { getLessonBySlug } from "@/lib/data/lessons";
-import { weeklyActivity } from "@/lib/data/progress";
+import { AssignmentsPanel } from "@/app/components/AssignmentsPanel";
+import { ComplianceFooter } from "@/app/components/ComplianceFooter";
+import { getWeeklyActivityFromProgress } from "@/lib/utils/progress-calc";
 
 export default function ProgressPage() {
   const { progress, hydrated, level } = useProgress();
@@ -30,6 +32,7 @@ export default function ProgressPage() {
   const nextCategory = categories.find((c) => c.slug === progress.nextLessonSlug);
   const earnedBadges = progress.badges.filter((b) => b.earned);
   const earnedCerts = progress.certifications.filter((c) => c.earned);
+  const weeklyActivity = getWeeklyActivityFromProgress(progress);
 
   return (
     <AppShell activeNav="progress">
@@ -42,6 +45,22 @@ export default function ProgressPage() {
       </section>
 
       <section className="px-5 pb-5"><GamificationHUD /></section>
+
+      <section className="px-5 pb-5">
+        <div className="flex items-end justify-between">
+          <h2 className="text-[16px] font-bold text-foreground">プロフィール</h2>
+          <Link href="/profile" className="text-[11px] font-semibold text-primary">編集 →</Link>
+        </div>
+        <p className="mt-1 text-[11px] text-muted">認定証に表示するお名前・サロン名を登録</p>
+      </section>
+
+      <section className="px-5 pb-5">
+        <div className="flex items-end justify-between">
+          <h2 className="text-[16px] font-bold text-foreground">必修トレーニング</h2>
+          <Link href="/assignments" className="text-[11px] font-semibold text-primary">すべて →</Link>
+        </div>
+        <div className="mt-3"><AssignmentsPanel /></div>
+      </section>
 
       <section className="px-5 pb-5">
         <div className="card-soft p-4">
@@ -148,12 +167,26 @@ export default function ProgressPage() {
         </div>
       </section>
 
+      <section className="px-5 pb-5">
+        <div className="grid grid-cols-2 gap-2">
+          <Link href="/glossary" className="card-soft p-3.5 text-center">
+            <p className="text-[12px] font-bold text-foreground">用語集</p>
+            <p className="text-[9px] text-muted">クイックリファレンス</p>
+          </Link>
+          <Link href="/help" className="card-soft p-3.5 text-center">
+            <p className="text-[12px] font-bold text-foreground">ヘルプ</p>
+            <p className="text-[9px] text-muted">FAQ・問合せ</p>
+          </Link>
+        </div>
+      </section>
+
       <section className="px-5 pb-6">
         <Link href="/admin" className="card-premium block p-5">
           <p className="section-label">ENTERPRISE</p>
           <h2 className="mt-1 text-[16px] font-bold text-foreground">教育管理画面 →</h2>
         </Link>
       </section>
+      <ComplianceFooter />
     </AppShell>
   );
 }

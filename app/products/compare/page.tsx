@@ -3,7 +3,7 @@ import { AppShell } from "@/app/components/AppShell";
 import { getDiagramImageUrl } from "@/lib/content/diagram-images";
 import { products } from "@/lib/data/products";
 
-const compareSlugs = ["oxlon-3", "oxlon-6", "oxlon-after-break"];
+const compareSlugs = ["oxlon-3", "oxlon-6", "oxlon-9", "oxlon-after-break"];
 const compareProducts = products.filter((p) => compareSlugs.includes(p.slug));
 
 const rows = [
@@ -26,12 +26,12 @@ export default function ProductComparePage() {
         <p className="section-label mt-5">PRODUCT COMPARISON</p>
         <h1 className="mt-2 text-[24px] font-bold text-foreground">OXLON 製品比較</h1>
         <p className="mt-2 text-[13px] leading-relaxed text-muted">
-          3% · 6% · After Break を横並びで比較。サロン提案・営業トークの材料に。
+          3% · 6% · 9% · After Break を横並びで比較。サロン提案・営業トークの材料に。
         </p>
       </section>
 
       <section className="px-5 pb-5">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {compareProducts.map((p) => (
             <div key={p.slug} className="card-soft overflow-hidden">
               <div className="h-20 overflow-hidden">

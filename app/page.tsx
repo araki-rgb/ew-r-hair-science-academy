@@ -3,17 +3,20 @@ import { AppShell } from "./components/AppShell";
 import { CategoryIcon } from "./components/CategoryIcon";
 import { HeroVisual } from "./components/HeroVisual";
 import { ModeToggle } from "./components/ModeToggle";
+import { AssignmentsPanel } from "./components/AssignmentsPanel";
+import { ComplianceFooter } from "./components/ComplianceFooter";
+import { ContinueLearningCard } from "./components/ContinueLearningCard";
+import { ProgressSummary } from "./components/ProgressSummary";
 import { RecommendedLessons } from "./components/RecommendedLessons";
 import { RoadmapTimeline } from "./components/RoadmapTimeline";
 import { categories } from "@/lib/data/categories";
 import { diagramGallery } from "@/lib/content/diagram-images";
 import { getDiagramPrompt } from "@/lib/content/diagram-prompts";
-import { demoProgress, getOverallProgress } from "@/lib/data/progress";
-import { getLessonBySlug } from "@/lib/data/lessons";
+import { enterpriseMetrics } from "@/lib/data/enterprise-value";
 
 const platformFeatures = [
   { label: "図解教材", value: "16種", sub: "AI生成済み" },
-  { label: "動画対応", value: "準備中", sub: "施術デモ収録予定" },
+  { label: "動画対応", value: "8本", sub: "シーン別デモ収録" },
   { label: "AI先生", value: "24h", sub: "現場質問に即回答" },
 ];
 
@@ -38,9 +41,6 @@ const diagramLabels: Record<string, string> = {
 };
 
 export default function Home() {
-  const overall = getOverallProgress();
-  const nextLesson = getLessonBySlug(demoProgress.nextLessonSlug);
-
   return (
     <AppShell activeNav="home">
       <section className="relative overflow-hidden px-5 pb-6 pt-6">
@@ -83,10 +83,7 @@ export default function Home() {
             <p className="section-label">LEARNING ROADMAP</p>
             <h2 className="mt-1 text-[16px] font-bold text-foreground">学習ロードマップ</h2>
           </div>
-          <div className="text-right">
-            <p className="text-[20px] font-bold text-primary">{overall.percent}%</p>
-            <p className="text-[9px] text-muted">全体進捗</p>
-          </div>
+          <ProgressSummary variant="inline" />
         </div>
         <div className="mt-4">
           <RoadmapTimeline />
@@ -102,41 +99,23 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="px-5 pb-5">
+        <AssignmentsPanel compact />
+      </section>
+
       <section className="px-5 pb-8">
-        <div className="card-premium overflow-hidden">
-          <div className="border-b border-border bg-gradient-to-r from-primary-muted/80 to-white px-5 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="section-label">CONTINUE LEARNING</p>
-                <p className="mt-1 text-[15px] font-bold text-foreground">続きから学習</p>
-              </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
-                <span className="text-[13px] font-bold text-primary">{overall.percent}%</span>
-              </div>
-            </div>
-          </div>
-          {nextLesson && (
-            <Link href={`/learn/${nextLesson.slug}`} className="block p-5">
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-white">
-                  IN PROGRESS
-                </span>
-                <span className="text-[10px] text-muted">{nextLesson.duration}</span>
-              </div>
-              <h3 className="mt-2.5 text-[17px] font-bold leading-snug text-foreground">
-                {nextLesson.title}
-              </h3>
-              <p className="mt-2 text-[12px] leading-relaxed text-muted">{nextLesson.description}</p>
-              <div className="mt-4 flex items-center gap-3">
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-primary-muted">
-                  <div className="h-full w-[35%] rounded-full bg-primary" />
-                </div>
-                <span className="text-[11px] font-semibold text-primary">35%</span>
-              </div>
-              <p className="mt-3 text-[12px] font-semibold text-primary">続きから学習 →</p>
-            </Link>
-          )}
-        </div>
+        <ContinueLearningCard />
+      </section>
+
+      <section className="px-5 pb-8">
+        <Link href="/enterprise" className="card-premium block p-5">
+          <p className="section-label">FOR ENTERPRISE</p>
+          <h3 className="mt-1 text-[16px] font-bold text-foreground">企業導入の価値</h3>
+          <p className="mt-2 text-[12px] text-muted">
+            教育コスト{enterpriseMetrics.roi[0].value}削減 · 提案品質{enterpriseMetrics.roi[1].value}向上
+          </p>
+          <p className="mt-2 text-[11px] font-semibold text-primary">経営・教育・営業の成果 →</p>
+        </Link>
       </section>
 
       <section className="pb-8">
@@ -240,6 +219,8 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      <ComplianceFooter />
     </AppShell>
   );
 }

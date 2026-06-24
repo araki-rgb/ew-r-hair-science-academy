@@ -8,7 +8,10 @@ import { RecommendedLessons } from "@/app/components/RecommendedLessons";
 import { RoadmapTimeline } from "@/app/components/RoadmapTimeline";
 import { categories } from "@/lib/data/categories";
 import { lessons } from "@/lib/data/lessons";
-import { demoProgress, getOverallProgress } from "@/lib/data/progress";
+import { AssignmentsPanel } from "@/app/components/AssignmentsPanel";
+import { ProgressSummary } from "@/app/components/ProgressSummary";
+import { useProgress } from "@/app/hooks/useProgress";
+import { calcMissionProgress } from "@/lib/utils/progress-calc";
 
 const quizOptions = [
   { key: "A", label: "ケラチン" },
@@ -21,7 +24,7 @@ const hairdresserCategories = ["hair-basic", "scalp-basic", "color-theory", "tre
 const dealerCategories = ["developer-science", "ewr-products", "sales-training", "color-theory", "customer-explanation"];
 
 export default function LearnPage() {
-  const overall = getOverallProgress();
+  const { progress, hydrated } = useProgress();
   const { mode } = useUserMode();
   const filteredSlugs = mode === "hairdresser" ? hairdresserCategories : dealerCategories;
   const filteredCategories = categories.filter((c) => filteredSlugs.includes(c.slug));
@@ -40,45 +43,16 @@ export default function LearnPage() {
         </div>
       </section>
 
+      <section className="px-5 pb-5">
+        <ProgressSummary />
+      </section>
+
       <section className="px-5 pb-6">
-        <div className="card-premium overflow-hidden p-5">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="section-label">YOUR PROGRESS</p>
-              <p className="mt-1 text-[28px] font-bold tracking-tight text-foreground">
-                {overall.percent}
-                <span className="text-[16px] text-muted">%</span>
-              </p>
-              <p className="mt-1 text-[11px] text-muted">
-                {overall.completed} / {overall.total} Lessons · 正答率 {overall.accuracy}%
-              </p>
-            </div>
-            <div className="relative flex h-16 w-16 items-center justify-center">
-              <svg viewBox="0 0 40 40" className="h-16 w-16 -rotate-90">
-                <circle cx="20" cy="20" r="16" fill="none" stroke="#e4f2ec" strokeWidth="3" />
-                <circle
-                  cx="20" cy="20" r="16" fill="none" stroke="#1b7a5a" strokeWidth="3"
-                  strokeDasharray={`${overall.percent} ${100 - overall.percent}`}
-                  strokeLinecap="round"
-                  pathLength="100"
-                />
-              </svg>
-              <span className="absolute text-[10px] font-bold text-primary">{overall.accuracy}%</span>
-            </div>
-          </div>
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            {[
-              { label: "修了", value: `${overall.completed}` },
-              { label: "正答", value: `${demoProgress.correctAnswers}/${demoProgress.totalQuestionsAnswered}` },
-              { label: "連続", value: `${demoProgress.currentStreak}日` },
-            ].map((s) => (
-              <div key={s.label} className="rounded-xl bg-white/80 px-2 py-2 text-center">
-                <p className="text-[14px] font-bold text-foreground">{s.value}</p>
-                <p className="text-[9px] text-muted">{s.label}</p>
-              </div>
-            ))}
-          </div>
+        <div className="flex items-end justify-between">
+          <h2 className="text-[16px] font-bold text-foreground">必修トレーニング</h2>
+          <Link href="/assignments" className="text-[11px] font-semibold text-primary">すべて →</Link>
         </div>
+        <div className="mt-3"><AssignmentsPanel compact /></div>
       </section>
 
       <section className="px-5 pb-8">
@@ -109,8 +83,8 @@ export default function LearnPage() {
         <div className="mt-4 space-y-4">
           {filteredCategories.map((cat) => {
             const lesson = lessons.find((l) => l.slug === cat.slug);
-            const completed = demoProgress.completedLessons.includes(cat.slug);
-            const progress = completed ? 100 : cat.slug === "scalp-basic" ? 35 : 0;
+            const completed = hydrated && progress.completedLessons.includes(cat.slug);
+            const missionProgress = hydrated ? calcMissionProgress(cat.slug, progress) : 0;
             return (
               <article key={cat.slug} className="card-soft overflow-hidden">
                 <div className="flex">
@@ -119,7 +93,7 @@ export default function LearnPage() {
                     style={{
                       background: completed
                         ? "linear-gradient(to bottom, #1b7a5a, #4db88a)"
-                        : progress > 0
+                        : missionProgress > 0
                           ? "linear-gradient(to bottom, #1b7a5a, #e4f2ec)"
                           : "#e4f2ec",
                     }}
@@ -149,23 +123,23 @@ export default function LearnPage() {
                     </div>
                     <div className="mt-4 flex items-center justify-between text-[11px]">
                       <span className="text-muted">{cat.duration}</span>
-                      <span className="font-semibold text-primary">{progress}%</span>
+                      <span className="font-semibold text-primary">{missionProgress}%</span>
                     </div>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-primary-muted">
                       <div
                         className="h-full rounded-full bg-primary transition-all duration-500"
-                        style={{ width: `${progress}%` }}
+                        style={{ width: `${missionProgress}%` }}
                       />
                     </div>
                     <Link
                       href={`/learn/${cat.slug}`}
                       className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-[13px] font-semibold transition active:scale-[0.98] ${
-                        progress > 0
+                        missionProgress > 0
                           ? "bg-primary text-white shadow-[0_6px_16px_-4px_rgb(27_122_90/0.35)]"
                           : "border border-primary/20 bg-white text-primary"
                       }`}
                     >
-                      {progress > 0 && !completed ? "続きから進む" : completed ? "復習する" : "Lessonへ進む"}
+                      {missionProgress > 0 && !completed ? "続きから進む" : completed ? "復習する" : "Lessonへ進む"}
                       <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
                         <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                       </svg>
@@ -176,6 +150,16 @@ export default function LearnPage() {
             );
           })}
         </div>
+      </section>
+
+      <section className="px-5 pb-5">
+        <Link href="/glossary" className="card-soft flex items-center justify-between p-4">
+          <div>
+            <p className="text-[13px] font-bold text-foreground">用語集</p>
+            <p className="text-[10px] text-muted">ケラチン・キューティクル等のクイックリファレンス</p>
+          </div>
+          <span className="text-[11px] font-semibold text-primary">→</span>
+        </Link>
       </section>
 
       <section className="px-5 pb-6">
