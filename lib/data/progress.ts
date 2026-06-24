@@ -22,6 +22,12 @@ export const demoProgress: UserProgress = {
       earned: true,
     },
     {
+      id: "science-foundation",
+      title: "サイエンス基礎認定",
+      description: "Level 1〜2を修了",
+      earned: false,
+    },
+    {
       id: "quiz-pass",
       title: "理解度テスト合格",
       description: "Quizで80点以上を達成",
@@ -41,6 +47,23 @@ export const demoProgress: UserProgress = {
     },
   ],
   nextLessonSlug: "scalp-basic",
+};
+
+export const weeklyActivity = [
+  { day: "月", active: true, minutes: 25 },
+  { day: "火", active: true, minutes: 18 },
+  { day: "水", active: true, minutes: 32 },
+  { day: "木", active: false, minutes: 0 },
+  { day: "金", active: false, minutes: 0 },
+  { day: "土", active: false, minutes: 0 },
+  { day: "日", active: false, minutes: 0 },
+];
+
+export const teamStats = {
+  totalLearners: 24,
+  activeThisWeek: 18,
+  avgProgress: 62,
+  completionRate: 45,
 };
 
 export function getOverallProgress() {

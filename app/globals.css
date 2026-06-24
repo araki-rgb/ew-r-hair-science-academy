@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7faf9;
-  --foreground: #1a2e28;
+  --background: #f4f8f6;
+  --foreground: #142820;
   --primary: #1b7a5a;
   --primary-light: #2d9b75;
-  --primary-dark: #145c44;
-  --primary-muted: #e8f5f0;
+  --primary-dark: #0f5c42;
+  --primary-muted: #e4f2ec;
   --accent: #4db88a;
-  --muted: #6b7c78;
-  --border: #e2ebe8;
+  --muted: #5f726c;
+  --border: #dce8e3;
   --card: #ffffff;
+  --gold: #c4a574;
+  --gold-muted: #f7f2ea;
 }
 
 @theme inline {
@@ -24,6 +26,8 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-card: var(--card);
+  --color-gold: var(--gold);
+  --color-gold-muted: var(--gold-muted);
   --font-sans: var(--font-noto-sans), system-ui, sans-serif;
 }
 
@@ -32,12 +36,13 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -45,62 +50,112 @@ body {
   }
 }
 
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes pulse-soft {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
 }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
   }
-  50% {
-    transform: translateY(-4px);
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes progress-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(27 122 90 / 0.2); }
+  50% { box-shadow: 0 0 12px 2px rgb(27 122 90 / 0.25); }
 }
 
 .animate-fade-up {
-  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.animate-fade-up-delay-1 {
-  animation-delay: 0.08s;
-}
+.animate-fade-up-delay-1 { animation-delay: 0.07s; }
+.animate-fade-up-delay-2 { animation-delay: 0.14s; }
+.animate-fade-up-delay-3 { animation-delay: 0.21s; }
+.animate-fade-up-delay-4 { animation-delay: 0.28s; }
 
-.animate-fade-up-delay-2 {
-  animation-delay: 0.16s;
-}
-
-.animate-fade-up-delay-3 {
-  animation-delay: 0.24s;
+.animate-fade-in {
+  animation: fade-in 0.4s ease both;
 }
 
 .animate-pulse-soft {
-  animation: pulse-soft 3s ease-in-out infinite;
+  animation: pulse-soft 3.5s ease-in-out infinite;
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-slide-right {
+  animation: slide-right 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .card-soft {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 1.25rem;
-  box-shadow: 0 4px 20px -6px rgb(27 122 90 / 0.08);
+  box-shadow:
+    0 1px 2px rgb(20 40 32 / 0.04),
+    0 8px 24px -8px rgb(27 122 90 / 0.1);
   transition:
-    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card-soft:active {
   transform: scale(0.985);
+}
+
+.card-premium {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fcfa 100%);
+  border: 1px solid rgb(27 122 90 / 0.12);
+  border-radius: 1.5rem;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.8) inset,
+    0 12px 32px -12px rgb(27 122 90 / 0.18);
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--primary);
 }
 
 .scrollbar-hide {
@@ -114,13 +169,108 @@ body {
 
 .diagram-placeholder {
   background: linear-gradient(
-    135deg,
+    145deg,
     var(--primary-muted) 0%,
-    #f0f9f6 50%,
+    #f0f9f6 45%,
     #ffffff 100%
   );
 }
 
+.diagram-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: linear-gradient(160deg, #edf7f3 0%, #f8fcfa 50%, #ffffff 100%);
+  border: 1px solid rgb(27 122 90 / 0.1);
+}
+
+.diagram-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgb(77 184 138 / 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+.video-placeholder {
+  background: linear-gradient(135deg, #0f5c42 0%, #1b7a5a 50%, #2d9b75 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.video-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.06) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
 .bottom-nav-safe {
   padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--border);
+  transition: all 0.3s ease;
+}
+
+.step-dot.active {
+  width: 24px;
+  background: var(--primary);
+  animation: progress-glow 2s ease-in-out infinite;
+}
+
+.step-dot.done {
+  background: var(--primary-light);
+}
+
+.cert-pattern {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgb(27 122 90 / 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgb(196 165 116 / 0.08) 0%, transparent 50%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgb(27 122 90 / 0.02) 8px,
+      rgb(27 122 90 / 0.02) 9px
+    );
+}
+
+.chat-bubble-user {
+  border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.chat-bubble-ai {
+  border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
+}
+
+.mode-pill {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mode-pill.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 16px -4px rgb(27 122 90 / 0.45);
+}
+
+.roadmap-line {
+  position: absolute;
+  left: 19px;
+  top: 28px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--primary), var(--border));
 }

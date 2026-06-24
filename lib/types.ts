@@ -63,6 +63,10 @@ export type AIPrompt = {
   id: string;
   question: string;
   answer: string;
+  hairdresserAnswer: string;
+  dealerAnswer: string;
+  answerVariants: string[];
+  category: string;
   relatedLesson?: string;
 };
 
