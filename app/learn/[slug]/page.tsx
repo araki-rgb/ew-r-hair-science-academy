@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { AppShell } from "@/app/components/AppShell";
-import { MissionPlayer } from "@/app/components/MissionPlayer";
+import { MissionPageLoader } from "@/app/components/MissionPageLoader";
 import { getMissionBySlug, getNextMission } from "@/lib/data/lessons";
 
 export function generateStaticParams() {
@@ -29,7 +29,7 @@ export default async function LessonPage({
 
   return (
     <AppShell activeNav="learn">
-      <MissionPlayer mission={mission} nextMission={nextMission} />
+      <MissionPageLoader slug={slug} fallbackMission={mission} fallbackNext={nextMission} />
     </AppShell>
   );
 }

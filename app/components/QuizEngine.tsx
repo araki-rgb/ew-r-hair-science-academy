@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { LessonQuestion } from "@/lib/types";
 import Link from "next/link";
 import { XP_REWARDS } from "@/lib/data/gamification";
+import { syncQuizComplete } from "@/lib/api/sync";
 import { completeQuiz, loadProgress } from "@/lib/storage/progress-store";
 
 const CHOICE_LABELS = ["A", "B", "C", "D"];
@@ -44,6 +45,7 @@ export function QuizEngine({ questions }: { questions: LessonQuestion[] }) {
       setXpGained(xp);
       if (!saved) {
         completeQuiz(loadProgress(), score, correctCount, total);
+        syncQuizComplete(score, correctCount, total);
         setSaved(true);
       }
       setFinished(true);

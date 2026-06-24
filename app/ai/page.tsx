@@ -27,6 +27,7 @@ type AIResponse = {
   category?: string;
   consultationMode?: AIConsultationMode;
   source: string;
+  citations?: string[];
 };
 
 export default function AIPage() {
@@ -172,7 +173,7 @@ export default function AIPage() {
                     </span>
                   )}
                   <span className="rounded-full bg-gold-muted px-2 py-0.5 text-[9px] font-medium text-gold">
-                    {response.source === "knowledge-base" ? "KB連携" : "フォールバック"}
+                    {response.source === "llm-rag" ? "LLM+RAG" : response.source === "rag" ? "RAG" : "フォールバック"}
                   </span>
                 </div>
                 <p className="mt-2.5 text-[13px] leading-[1.9] text-foreground">{response.answer}</p>
@@ -200,6 +201,11 @@ export default function AIPage() {
                   </div>
                 )}
 
+                {response.citations && response.citations.length > 0 && (
+                  <p className="mt-3 text-[9px] text-muted">
+                    参照: {response.citations.slice(0, 3).join(" · ")}
+                  </p>
+                )}
                 <div className="mt-3 flex flex-wrap gap-2">
                   {response.relatedLesson && (
                     <Link href={`/learn/${response.relatedLesson}`} className="text-[11px] font-semibold text-primary">

@@ -3,15 +3,24 @@
 import { useCallback, useEffect, useState } from "react";
 import type { UserProgress } from "@/lib/types";
 import { getLevelFromXp } from "@/lib/data/gamification";
-import { getDefaultProgress, loadProgress } from "@/lib/storage/progress-store";
+import { fetchServerProgress } from "@/lib/api/sync";
+import { getDefaultProgress, loadProgress, saveProgress } from "@/lib/storage/progress-store";
 
 export function useProgress() {
   const [progress, setProgress] = useState<UserProgress>(getDefaultProgress);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setProgress(loadProgress());
-    setHydrated(true);
+    (async () => {
+      const server = await fetchServerProgress();
+      if (server) {
+        saveProgress(server);
+        setProgress(server);
+      } else {
+        setProgress(loadProgress());
+      }
+      setHydrated(true);
+    })();
   }, []);
 
   useEffect(() => {

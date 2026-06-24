@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Mission, MissionQuestion } from "@/lib/types";
 import { XP_REWARDS } from "@/lib/data/gamification";
+import { syncMissionComplete } from "@/lib/api/sync";
 import { trackEvent } from "@/lib/analytics/events";
 import { completeMission, loadProgress } from "@/lib/storage/progress-store";
 import { CertificateExport } from "./CertificateExport";
@@ -90,7 +91,7 @@ function SceneCard({ q }: { q: MissionQuestion }) {
           </div>
         </div>
       </div>
-      <VideoArea video={q.video} compact />
+      <VideoArea video={q.video} questionId={q.id} compact />
     </div>
   );
 }
@@ -161,6 +162,7 @@ export function MissionPlayer({ mission, nextMission }: Props) {
       setSessionXp(finalXp);
       if (!saved) {
         completeMission(loadProgress(), mission.slug, finalXp, finalAccuracy);
+        syncMissionComplete(mission.slug, finalXp, finalAccuracy);
         trackEvent("mission_complete", { slug: mission.slug, accuracy: finalAccuracy });
         setSaved(true);
       }
