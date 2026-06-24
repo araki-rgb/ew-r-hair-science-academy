@@ -19,11 +19,24 @@ const CONSULTATION_MODES: {
   { key: "product", label: "商品説明", desc: "OXLONライン・製品特性", icon: "📦" },
 ];
 
+type AIResponse = {
+  answer: string;
+  variants: string[];
+  relatedLesson: string | null;
+  relatedProduct: string | null;
+  category?: string;
+  consultationMode?: AIConsultationMode;
+  source: string;
+};
+
 export default function AIPage() {
   const [mode, setConsultMode] = useState<AIConsultationMode>("treatment");
-  const [activeId, setActiveId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [variantIdx, setVariantIdx] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [response, setResponse] = useState<AIResponse | null>(null);
+  const [userQuestion, setUserQuestion] = useState("");
   const { mode: userMode } = useUserMode();
 
   const filtered = useMemo(
@@ -31,18 +44,42 @@ export default function AIPage() {
     [mode],
   );
 
-  const active = aiPrompts.find((p) => p.id === activeId);
-  const answer = active
-    ? userMode === "dealer" ? active.dealerAnswer : active.hairdresserAnswer
-    : "";
+  const askAI = async (question: string) => {
+    if (!question.trim()) return;
+    setLoading(true);
+    setError(null);
+    setUserQuestion(question.trim());
+    setVariantIdx(0);
+
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: question, mode, userMode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? "回答の取得に失敗しました");
+        setResponse(null);
+        return;
+      }
+      setResponse(data as AIResponse);
+    } catch {
+      setError("ネットワークエラーが発生しました。再度お試しください。");
+      setResponse(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleConsult = (id: string) => {
     const p = aiPrompts.find((x) => x.id === id);
     if (!p) return;
-    setActiveId(id);
     setInput(p.question);
-    setVariantIdx(0);
+    askAI(p.question);
   };
+
+  const handleSubmit = () => askAI(input);
 
   return (
     <AppShell activeNav="ai">
@@ -50,8 +87,7 @@ export default function AIPage() {
         <p className="section-label">AI ASSISTANT</p>
         <h1 className="mt-2 text-[26px] font-bold tracking-tight text-foreground">AI先生</h1>
         <p className="mt-2 text-[13px] leading-relaxed text-muted">
-          施術・薬剤・営業・商品の相談に対応するAIアシスタント。
-          将来LLM接続を前提とした拡張可能な設計です。
+          施術・薬剤・営業・商品の相談に対応。ナレッジベース連携済み、LLM接続準備完了。
         </p>
         <div className="mt-4"><ModeToggle /></div>
       </section>
@@ -63,7 +99,7 @@ export default function AIPage() {
             <button
               key={m.key}
               type="button"
-              onClick={() => { setConsultMode(m.key); setActiveId(null); }}
+              onClick={() => { setConsultMode(m.key); setResponse(null); setError(null); }}
               className={`card-soft p-3 text-left transition ${
                 mode === m.key ? "ring-2 ring-primary/25 bg-primary-muted/30" : ""
               }`}
@@ -84,7 +120,8 @@ export default function AIPage() {
               key={p.id}
               type="button"
               onClick={() => handleConsult(p.id)}
-              className={`card-soft w-full p-3.5 text-left ${activeId === p.id ? "ring-2 ring-primary/25" : ""}`}
+              disabled={loading}
+              className="card-soft w-full p-3.5 text-left disabled:opacity-60"
             >
               <p className="text-[12px] font-semibold text-foreground">{p.question}</p>
               <p className="mt-1 text-[10px] text-muted">{p.category}</p>
@@ -94,11 +131,27 @@ export default function AIPage() {
       </section>
 
       <section className="px-5 pb-3 min-h-[240px]">
-        {active ? (
+        {loading ? (
+          <div className="card-soft flex items-center gap-3 p-5">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            <p className="text-[13px] text-muted">AI先生が回答を準備中...</p>
+          </div>
+        ) : error ? (
+          <div className="card-soft border border-[#e8b4b4] bg-[#fdf2f2] p-4">
+            <p className="text-[13px] font-semibold text-[#9b3b3b]">{error}</p>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="mt-3 text-[12px] font-semibold text-primary"
+            >
+              再試行 →
+            </button>
+          </div>
+        ) : response ? (
           <div className="space-y-3">
             <div className="flex justify-end animate-fade-up">
               <div className="chat-bubble-user max-w-[88%] px-4 py-3 text-[13px] leading-relaxed text-white">
-                {active.question}
+                {userQuestion}
               </div>
             </div>
             <div className="flex gap-2.5 animate-fade-up animate-fade-up-delay-1">
@@ -113,17 +166,22 @@ export default function AIPage() {
                   <span className="rounded-full bg-primary-muted px-2 py-0.5 text-[9px] font-medium text-primary">
                     {userMode === "hairdresser" ? "美容師向け" : "ディーラー向け"}
                   </span>
-                  <span className="rounded-full bg-background px-2 py-0.5 text-[9px] text-muted">
-                    {CONSULTATION_MODES.find((m) => m.key === active.consultationMode)?.label}
+                  {response.consultationMode && (
+                    <span className="rounded-full bg-background px-2 py-0.5 text-[9px] text-muted">
+                      {CONSULTATION_MODES.find((m) => m.key === response.consultationMode)?.label}
+                    </span>
+                  )}
+                  <span className="rounded-full bg-gold-muted px-2 py-0.5 text-[9px] font-medium text-gold">
+                    {response.source === "knowledge-base" ? "KB連携" : "フォールバック"}
                   </span>
                 </div>
-                <p className="mt-2.5 text-[13px] leading-[1.9] text-foreground">{answer}</p>
+                <p className="mt-2.5 text-[13px] leading-[1.9] text-foreground">{response.answer}</p>
 
-                {active.answerVariants.length > 0 && (
+                {response.variants.length > 0 && (
                   <div className="mt-4 border-t border-border pt-3">
                     <p className="text-[10px] font-semibold text-muted">別の説明パターン</p>
                     <div className="mt-2 flex gap-1">
-                      {active.answerVariants.map((_, i) => (
+                      {response.variants.map((_, i) => (
                         <button
                           key={i}
                           type="button"
@@ -137,19 +195,19 @@ export default function AIPage() {
                       ))}
                     </div>
                     <p className="mt-2 text-[12px] leading-relaxed text-muted">
-                      {active.answerVariants[variantIdx]}
+                      {response.variants[variantIdx]}
                     </p>
                   </div>
                 )}
 
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {active.relatedLesson && (
-                    <Link href={`/learn/${active.relatedLesson}`} className="text-[11px] font-semibold text-primary">
+                  {response.relatedLesson && (
+                    <Link href={`/learn/${response.relatedLesson}`} className="text-[11px] font-semibold text-primary">
                       関連Mission →
                     </Link>
                   )}
-                  {active.relatedProduct && (
-                    <Link href={`/products/${active.relatedProduct}`} className="text-[11px] font-semibold text-primary">
+                  {response.relatedProduct && (
+                    <Link href={`/products/${response.relatedProduct}`} className="text-[11px] font-semibold text-primary">
                       関連製品 →
                     </Link>
                   )}
@@ -159,8 +217,8 @@ export default function AIPage() {
           </div>
         ) : (
           <div className="card-soft py-12 text-center">
-            <p className="text-[13px] font-medium text-foreground">相談を選択してください</p>
-            <p className="mt-1 text-[11px] text-muted">カテゴリを選び、相談例をタップ</p>
+            <p className="text-[13px] font-medium text-foreground">相談を選択または入力してください</p>
+            <p className="mt-1 text-[11px] text-muted">カテゴリを選び、相談例をタップするか自由入力</p>
           </div>
         )}
       </section>
@@ -168,23 +226,23 @@ export default function AIPage() {
       <section className="sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] border-t border-border bg-white/95 px-5 py-3 backdrop-blur-lg">
         <div className="mb-2 rounded-xl bg-primary-muted/40 px-3 py-2">
           <p className="text-[9px] text-muted">
-            🔌 LLM接続予定 — APIエンドポイント・プロンプトテンプレート・RAG教材連携に対応可能な設計
+            ✅ ナレッジベースAPI接続済み · LLM差し替え対応 · RAG教材連携準備完了
           </p>
         </div>
         <div className="flex gap-2">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && !loading && handleSubmit()}
             placeholder={`${CONSULTATION_MODES.find((m) => m.key === mode)?.label}について質問...`}
-            className="flex-1 rounded-2xl border border-border bg-background px-4 py-3 text-[13px] outline-none focus:border-primary"
+            disabled={loading}
+            className="flex-1 rounded-2xl border border-border bg-background px-4 py-3 text-[13px] outline-none focus:border-primary disabled:opacity-60"
           />
           <button
             type="button"
-            onClick={() => {
-              const match = filtered.find((p) => input.includes(p.question.slice(0, 6)));
-              if (match) handleConsult(match.id);
-            }}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-white"
+            onClick={handleSubmit}
+            disabled={loading || !input.trim()}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-white disabled:opacity-50"
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />

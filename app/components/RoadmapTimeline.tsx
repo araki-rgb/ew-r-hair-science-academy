@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
-  getRoadmap,
+  applyProgressToRoadmap,
   type RoadmapStep,
   type UserMode,
 } from "@/lib/data/roadmaps";
+import { useProgress } from "@/app/hooks/useProgress";
 import { useUserMode } from "./ModeToggle";
 
 function StepIcon({ status }: { status: RoadmapStep["status"] }) {
@@ -96,6 +97,7 @@ function RoadmapItem({ step, isLast }: { step: RoadmapStep; isLast: boolean }) {
 
 export function RoadmapTimeline({ initialMode }: { initialMode?: UserMode }) {
   const { mode, hydrated } = useUserMode();
+  const { progress, hydrated: progressHydrated } = useProgress();
   const [activeMode, setActiveMode] = useState<UserMode>(initialMode ?? "hairdresser");
 
   useEffect(() => {
@@ -111,7 +113,9 @@ export function RoadmapTimeline({ initialMode }: { initialMode?: UserMode }) {
     return () => window.removeEventListener("ewr-mode-change", handler);
   }, []);
 
-  const steps = getRoadmap(activeMode);
+  const steps = progressHydrated
+    ? applyProgressToRoadmap(activeMode, progress.completedMissions, progress.nextLessonSlug)
+    : applyProgressToRoadmap(activeMode, [], "hair-basic");
 
   return (
     <ol className="relative">

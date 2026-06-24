@@ -151,10 +151,37 @@ export const dealerRecommendations: RecommendedLesson[] = [
   },
 ];
 
+const ROADMAP_TEMPLATES: Record<UserMode, RoadmapStep[]> = {
+  hairdresser: hairdresserRoadmap,
+  dealer: dealerRoadmap,
+};
+
 export function getRoadmap(mode: UserMode) {
-  return mode === "hairdresser" ? hairdresserRoadmap : dealerRoadmap;
+  return ROADMAP_TEMPLATES[mode];
 }
 
-export function getRecommendations(mode: UserMode) {
-  return mode === "hairdresser" ? hairdresserRecommendations : dealerRecommendations;
+export function applyProgressToRoadmap(
+  mode: UserMode,
+  completedMissions: string[],
+  nextLessonSlug?: string,
+): RoadmapStep[] {
+  const template = ROADMAP_TEMPLATES[mode];
+  return template.map((step, i) => {
+    if (completedMissions.includes(step.slug)) {
+      return { ...step, status: "completed" as const, badge: "修了" };
+    }
+    const prevDone = i === 0 || completedMissions.includes(template[i - 1].slug);
+    if (!prevDone) {
+      return { ...step, status: "locked" as const, badge: undefined };
+    }
+    if (step.slug === nextLessonSlug) {
+      return { ...step, status: "in-progress" as const, badge: "学習中" };
+    }
+    return { ...step, status: "available" as const, badge: step.badge ?? undefined };
+  });
+}
+
+export function getRecommendations(mode: UserMode, completedMissions: string[] = []) {
+  const base = mode === "hairdresser" ? hairdresserRecommendations : dealerRecommendations;
+  return base.filter((l) => !completedMissions.includes(l.slug));
 }

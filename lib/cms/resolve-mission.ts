@@ -1,6 +1,7 @@
 import { getDiagramPrompt } from "../content/diagram-prompts";
 import { getDiagramImageUrl } from "../content/diagram-images";
 import { missionSceneOverrides } from "../content/mission-scenes";
+import { missionVideos } from "../content/videos";
 import type {
   Lesson,
   LessonQuestion,
@@ -120,17 +121,31 @@ function resolveQuestion(
       imageUrl,
       status,
     },
-    video: {
-      id: question.video?.id ?? `${question.id}-video`,
-      title: question.video?.title ?? `${question.diagramTitle} — 施術解説`,
-      description:
-        question.video?.description ??
-        "施術手順と科学的背景を解説する動画教材（準備中）",
-      url: question.video?.url ?? null,
-      thumbnailUrl: question.video?.thumbnailUrl ?? null,
-      status: question.video?.url ? "ready" : "pending",
-      duration: question.video?.duration,
-    },
+    video: (() => {
+      const videoOverride = missionVideos[question.id];
+      const url = question.video?.url ?? videoOverride?.url ?? null;
+      const thumbnailUrl =
+        question.video?.thumbnailUrl ??
+        videoOverride?.thumbnailUrl ??
+        (url ? getDiagramImageUrl(question.diagramType) : null);
+      return {
+        id: question.video?.id ?? videoOverride?.id ?? `${question.id}-video`,
+        title:
+          question.video?.title ??
+          videoOverride?.title ??
+          `${question.diagramTitle} — 施術解説`,
+        description:
+          question.video?.description ??
+          videoOverride?.description ??
+          "施術手順と科学的背景を解説する動画教材（準備中）",
+        url,
+        thumbnailUrl,
+        status: (question.video?.status ??
+          videoOverride?.status ??
+          (url ? "ready" : "pending")) as "pending" | "ready",
+        duration: question.video?.duration ?? videoOverride?.duration,
+      };
+    })(),
   };
 }
 

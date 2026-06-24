@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import type { Mission, MissionQuestion } from "@/lib/types";
 import { XP_REWARDS } from "@/lib/data/gamification";
 import { completeMission, loadProgress } from "@/lib/storage/progress-store";
+import { CertificateExport } from "./CertificateExport";
 import { DiagramArea } from "./DiagramArea";
 import { VideoArea } from "./VideoArea";
 
@@ -392,6 +393,7 @@ export function MissionPlayer({ mission, nextMission }: Props) {
                 </div>
               </div>
               <div className="space-y-3 p-5">
+                <CertificateExport mission={mission} accuracy={accuracy} />
                 {nextMission ? (
                   <button
                     type="button"

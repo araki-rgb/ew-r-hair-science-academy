@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getRecommendations, type UserMode } from "@/lib/data/roadmaps";
+import { useProgress } from "@/app/hooks/useProgress";
 import { useUserMode } from "./ModeToggle";
 
 export function RecommendedLessons({ initialMode }: { initialMode?: UserMode }) {
@@ -21,7 +22,11 @@ export function RecommendedLessons({ initialMode }: { initialMode?: UserMode }) 
     return () => window.removeEventListener("ewr-mode-change", handler);
   }, []);
 
-  const lessons = getRecommendations(activeMode);
+  const { progress, hydrated: progressHydrated } = useProgress();
+  const lessons = getRecommendations(
+    activeMode,
+    progressHydrated ? progress.completedMissions : [],
+  );
 
   return (
     <div className="space-y-3">

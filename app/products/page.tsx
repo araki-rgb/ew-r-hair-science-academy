@@ -31,6 +31,26 @@ export default function ProductsPage() {
         </p>
       </section>
 
+      <section className="px-5 pb-5">
+        <Link
+          href="/products/compare"
+          className="card-premium flex items-center gap-4 overflow-hidden p-4 transition active:scale-[0.99]"
+        >
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gold-muted text-gold">
+            <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+              <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[14px] font-bold text-foreground">OXLON 製品比較</p>
+            <p className="mt-0.5 text-[11px] text-muted">3% · 6% · After Break を横並びで比較</p>
+          </div>
+          <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0 text-primary">
+            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+          </svg>
+        </Link>
+      </section>
+
       <section className="px-5 pb-6">
         <div className="grid grid-cols-3 gap-2">
           {proposalFramework.map((item) => (
