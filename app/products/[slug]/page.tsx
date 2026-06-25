@@ -50,13 +50,12 @@ export default async function ProductDetailPage({
 
       {slug === "oxlon-after-break" && (
         <section className="page-section">
-          <Link href="/learn/after-break" className="card-premium card-interactive block p-5">
-            <p className="section-label">STUDY GUIDE</p>
-            <h2 className="section-title">毛髪理論で読み解く</h2>
-            <p className="mt-2 text-[12px] leading-relaxed text-muted">
-              三層構造・4つの結合・機能ブロックまで、段階的に学べます。
+          <Link href="/learn/after-break" className="card-soft card-interactive block p-5">
+            <h2 className="text-[15px] font-bold text-foreground">毛髪理論で読み解く</h2>
+            <p className="mt-2 text-[13px] leading-[1.9] text-muted">
+              髪の構造、施術後の残留物、製品の役割を順を追って整理した学習ページがあります。
             </p>
-            <p className="btn-ghost mt-3 text-[11px]">学習ページを開く →</p>
+            <p className="mt-3 text-[13px] font-medium text-primary">学習ページへ →</p>
           </Link>
         </section>
       )}

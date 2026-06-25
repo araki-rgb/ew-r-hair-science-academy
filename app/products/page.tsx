@@ -39,12 +39,12 @@ export default function ProductsPage() {
             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
           </svg>
         </Link>
-        <Link href="/learn/after-break" className="card-soft card-interactive flex items-center justify-between p-4">
-          <div>
-            <p className="text-[13px] font-bold text-foreground">After Break 学習ガイド</p>
-            <p className="mt-0.5 text-[10px] text-muted">毛髪理論で構造的に理解する</p>
-          </div>
-          <span className="badge-gold">Study</span>
+        <Link href="/learn/after-break" className="card-soft card-interactive block p-4">
+          <p className="text-[15px] font-bold text-foreground">アフターブレイクを構造的に理解する</p>
+          <p className="mt-2 text-[13px] leading-[1.9] text-muted">
+            毛髪の構造から製品の役割まで、順を追って読める学習ページです。
+          </p>
+          <p className="mt-3 text-[13px] font-medium text-primary">読む →</p>
         </Link>
       </section>
 

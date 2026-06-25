@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AppShell } from "@/app/components/AppShell";
 import { AfterBreakFlowDiagram } from "@/app/components/AfterBreakFlowDiagram";
 import { DiagramIllustration } from "@/app/components/DiagramIllustration";
-import { PageHeader } from "@/app/components/PageHeader";
 import {
   afterBreakSummary,
   colorVsPerm,
@@ -19,272 +18,250 @@ import {
 export default function AfterBreakGuidePage() {
   return (
     <AppShell activeNav="learn">
-      <PageHeader
-        backHref="/learn"
-        backLabel="Mission"
-        label="STUDY GUIDE"
-        title="アフターブレイクを構造的に理解する"
-        description="毛髪理論と製品の機能構造を、段階的に学べます。"
-        badge="基礎"
-      />
+      <header className="guide-hero">
+        <Link href="/learn" className="back-link">
+          <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden>
+            <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          Missionへ戻る
+        </Link>
+        <h1 className="guide-hero-title mt-6">アフターブレイクを構造的に理解する</h1>
+        <p className="guide-hero-desc">
+          毛髪の構造と、施術後に残りやすい成分の関係を整理した学習ページです。
+          上から順にお読みいただくと、製品の位置づけまでつながって理解できます。
+        </p>
+      </header>
 
-      <section className="page-section pt-0">
-        <div className="card-premium p-5">
-          <p className="section-label">ONE SENTENCE</p>
-          <p className="mt-2 text-[15px] font-bold leading-snug text-foreground">
-            {afterBreakSummary.oneLiner}
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {afterBreakSummary.targets.map((t) => (
-              <span key={t} className="badge-primary">{t}</span>
+      <article className="guide-body">
+        <section className="guide-chapter">
+          <p className="guide-lead">{afterBreakSummary.oneLiner}</p>
+          <p className="guide-lead">
+            カラーやパーマのあと、髪や頭皮に残りやすいのは
+            {afterBreakSummary.targets.map((t, i) => (
+              <span key={t}>
+                {i > 0 && (i === afterBreakSummary.targets.length - 1 ? "、そして" : "、")}
+                <strong>{t}</strong>
+              </span>
             ))}
-          </div>
-          <p className="mt-4 text-[12px] leading-relaxed text-muted">
-            使い方：<strong className="text-foreground">{afterBreakSummary.usage}</strong>
+            です。シャンプーに混ぜて洗う工程のなかで、これらをまとめて処理する設計になっています。
           </p>
-          <div className="compliance-note mt-4">
-            <p className="font-semibold text-foreground">「修復」の正しい理解</p>
-            <p className="mt-1.5">{afterBreakSummary.notClaim}</p>
+          <p className="guide-lead">
+            使い方は、シャンプー1プッシュに対して本品1プッシュ。別工程を増やさず、いつもの洗髪に組み込めます。
+          </p>
+          <div className="guide-callout">
+            <p className="guide-callout-title">「修復」という言葉の捉え方</p>
+            <p className="guide-callout-body">{afterBreakSummary.notClaim}</p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="page-section">
-        <p className="section-label">LEARNING PATH</p>
-        <h2 className="section-title">学習の順番</h2>
-        <p className="mt-1 text-[11px] text-muted">上から順に読むと、知識がつながりやすくなります。</p>
-        <div className="mt-3 space-y-2">
-          {learningPath.map((step) => (
-            <div key={step.step} className="flow-step">
-              <span className="flow-step-num">{step.step}</span>
-              <div>
-                <p className="text-[13px] font-bold text-foreground">{step.title}</p>
-                <p className="mt-0.5 text-[11px] text-muted">{step.focus}</p>
-                <p className="mt-1 text-[10px] font-medium text-primary">ゴール：{step.goal}</p>
-              </div>
+        <section className="guide-chapter">
+          <p className="guide-chapter-num">目次</p>
+          <h2 className="guide-chapter-title">このページの読み方</h2>
+          <p className="guide-chapter-intro">
+            まず髪の構造を押さえ、つづいて施術後の残留物と製品の役割へ進みます。
+          </p>
+          <ol className="guide-index">
+            {learningPath.map((step) => (
+              <li key={step.step}>
+                <span className="guide-index-num">{step.step}</span>
+                <div className="guide-index-text">
+                  <p className="guide-index-title">{step.title}</p>
+                  <p className="guide-index-desc">{step.focus}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="guide-chapter" id="hair-structure">
+          <p className="guide-chapter-num">第1章</p>
+          <h2 className="guide-chapter-title">髪の三層構造</h2>
+          <p className="guide-chapter-intro">
+            髪は「外側の保護層」「内側の本体」「中心の芯」の三層でできています。
+            どの層に何が起きるかを知ると、施術後の変化の説明がしやすくなります。
+          </p>
+          <figure className="guide-figure">
+            <div className="guide-figure-visual aspect-[4/3]">
+              <DiagramIllustration type="hair-cross-section" />
+            </div>
+            <figcaption className="guide-figure-caption">
+              断面図：外側がキューティクル、中間がコルテックス、中心がメデュラ
+            </figcaption>
+          </figure>
+          {hairLayers.map((layer) => (
+            <div key={layer.name} className="guide-item">
+              <h3 className="guide-item-title">{layer.name}</h3>
+              <p className="guide-item-meta">{layer.location}</p>
+              <p className="guide-item-body">{layer.role}</p>
+              <p className="guide-item-aside">たとえるなら、{layer.image}。</p>
             </div>
           ))}
-        </div>
-      </section>
+          <p className="guide-prose">
+            毛髪全体の主成分はケラチンというタンパク質です。シスチンを多く含むことが、丈夫さや弾力につながります。
+          </p>
+        </section>
 
-      <section className="page-section" id="hair-structure">
-        <p className="section-label">STEP 01</p>
-        <h2 className="section-title">髪の三層構造</h2>
-        <div className="card-soft mt-3 overflow-hidden">
-          <div className="aspect-[4/3] bg-primary-muted/30 p-4">
-            <DiagramIllustration type="hair-cross-section" />
-          </div>
-          <div className="divide-y divide-border-subtle">
-            {hairLayers.map((layer) => (
-              <div key={layer.name} className="p-4">
-                <div className="flex items-baseline justify-between gap-2">
-                  <h3 className="text-[14px] font-bold text-foreground">{layer.name}</h3>
-                  <span className="badge-muted">{layer.location}</span>
-                </div>
-                <p className="mt-1.5 text-[12px] leading-relaxed text-foreground">{layer.role}</p>
-                <p className="mt-2 rounded-lg bg-primary-muted/40 px-3 py-2 text-[11px] text-primary">
-                  イメージ：{layer.image}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <p className="mt-3 text-[11px] leading-relaxed text-muted">
-          主成分は<strong className="text-foreground">ケラチン</strong>（タンパク質）で、シスチンが多いことが丈夫さにつながります。
-        </p>
-      </section>
-
-      <section className="page-section" id="bonds">
-        <p className="section-label">STEP 02</p>
-        <h2 className="section-title">4つの結合</h2>
-        <p className="mt-1 text-[11px] text-muted">
-          髪はたくさんの「分子の手つなぎ」で形を保っています。どの手つなぎが切れやすいかが、濡れたとき・薬剤をつけたときの違いになります。
-        </p>
-        <div className="mt-3 space-y-2">
+        <section className="guide-chapter" id="bonds">
+          <p className="guide-chapter-num">第2章</p>
+          <h2 className="guide-chapter-title">4つの結合</h2>
+          <p className="guide-chapter-intro">
+            髪の形や強さは、分子どうしの「つながり」で保たれています。
+            どのつながりが切れやすいかによって、濡れたとき・乾いたとき・薬剤をつけたときの違いが生まれます。
+          </p>
           {hairBonds.map((bond) => (
-            <div key={bond.name} className="card-soft p-4">
-              <h3 className="text-[14px] font-bold text-primary">{bond.name}</h3>
-              <dl className="mt-2 space-y-1.5 text-[11px]">
-                <div className="flex gap-2">
-                  <dt className="w-16 shrink-0 font-semibold text-muted">役割</dt>
-                  <dd className="text-foreground">{bond.role}</dd>
-                </div>
-                <div className="flex gap-2">
-                  <dt className="w-16 shrink-0 font-semibold text-muted">変化要因</dt>
-                  <dd className="text-foreground">{bond.trigger}</dd>
-                </div>
-                <div className="flex gap-2">
-                  <dt className="w-16 shrink-0 font-semibold text-muted">戻りやすさ</dt>
-                  <dd className="text-foreground">{bond.recovery}</dd>
-                </div>
-              </dl>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="page-section" id="moisture-ph">
-        <p className="section-label">STEP 03</p>
-        <h2 className="section-title">水分とpH</h2>
-        <div className="mt-3 space-y-2">
-          <div className="card-soft p-4">
-            <span className="badge-muted">水分</span>
-            <p className="mt-2 text-[12px] leading-relaxed text-foreground">{moisturePh.moisture}</p>
-          </div>
-          <div className="card-soft p-4">
-            <span className="badge-muted">pH</span>
-            <p className="mt-2 text-[12px] leading-relaxed text-foreground">{moisturePh.ph}</p>
-          </div>
-          <div className="card-soft border-primary/20 bg-primary-muted/20 p-4">
-            <span className="badge-primary">施術後</span>
-            <p className="mt-2 text-[12px] leading-relaxed text-foreground">{moisturePh.aftercare}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="page-section" id="functional-blocks">
-        <p className="section-label">STEP 04–05</p>
-        <h2 className="section-title">アフターブレイクの機能構造</h2>
-        <p className="mt-1 text-[11px] text-muted">
-          物理的な機械構造ではなく、残留物ごとに成分群を割り当てた「機能構造」です。
-        </p>
-        <div className="mt-3 space-y-2">
-          {functionalBlocks.map((block) => (
-            <div key={block.block} className="card-soft p-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-[13px] font-bold text-foreground">{block.block}</h3>
-                <span className="badge-primary">{block.target}</span>
-              </div>
-              <p className="mt-2 text-[11px] font-medium text-primary">{block.ingredients}</p>
-              <p className="mt-1.5 text-[12px] leading-relaxed text-foreground">{block.simple}</p>
-              <p className="mt-2 text-[10px] text-muted">※ {block.note}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="page-section" id="process-flow">
-        <p className="section-label">FLOW</p>
-        <h2 className="section-title">工程フロー</h2>
-        <p className="mt-1 text-[11px] text-muted">理科の反応経路図のように、「何が残るか」と「どう対応するか」を見ます。</p>
-        <div className="card-soft mt-3 p-3">
-          <AfterBreakFlowDiagram />
-        </div>
-      </section>
-
-      <section className="page-section" id="residue">
-        <p className="section-label">THEORY LINK</p>
-        <h2 className="section-title">残留物と毛髪理論の接点</h2>
-        <p className="mt-1 text-[11px] text-muted">キーワード：残留 · pHの立て直し · 酸化の後始末 · 摩擦の低減</p>
-        <div className="mt-3 space-y-2">
-          {residueConnections.map((row) => (
-            <details key={row.factor} className="faq-item">
-              <summary>{row.factor}</summary>
-              <div className="space-y-2 text-[11px] leading-relaxed">
-                <p><strong>関わる部位：</strong>{row.area}</p>
-                <p><strong>起こりやすいこと：</strong>{row.effect}</p>
-                <p><strong>アフターブレイクの対応：</strong>{row.response}</p>
-                <p className="rounded-lg bg-danger-muted/50 px-2.5 py-2 text-muted">
-                  <strong className="text-foreground">限界の見方：</strong>{row.limit}
-                </p>
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <section className="page-section" id="color-vs-perm">
-        <p className="section-label">COMPARE</p>
-        <h2 className="section-title">カラー vs パーマ</h2>
-        <p className="mt-1 text-[11px] text-muted">
-          覚え方：カラーは外壁が荒れやすく、パーマは本体の結び目が変わりやすい。
-        </p>
-        <div className="mt-3 overflow-hidden rounded-2xl border border-border-subtle bg-white">
-          <div className="grid grid-cols-3 gap-px bg-border-subtle text-center text-[9px] font-bold">
-            <div className="bg-primary-muted/50 px-2 py-2.5 text-primary">比較項目</div>
-            <div className="bg-primary-muted/50 px-2 py-2.5 text-primary">ヘアカラー</div>
-            <div className="bg-primary-muted/50 px-2 py-2.5 text-primary">パーマ</div>
-          </div>
-          {colorVsPerm.map((row) => (
-            <div key={row.label} className="border-t border-border-subtle">
-              <p className="bg-background px-3 py-2 text-[10px] font-bold text-muted">{row.label}</p>
-              <div className="grid grid-cols-2 gap-2 px-3 pb-3">
-                <div className="rounded-lg bg-primary-muted/30 p-2.5 text-[10px] leading-relaxed">{row.color}</div>
-                <div className="rounded-lg bg-gold-muted/60 p-2.5 text-[10px] leading-relaxed">{row.perm}</div>
-              </div>
-              <p className="border-t border-border-subtle bg-success-muted/40 px-3 py-2 text-[10px] leading-relaxed text-primary">
-                After Break：{row.afterBreak}
+            <div key={bond.name} className="guide-item">
+              <h3 className="guide-item-title">{bond.name}</h3>
+              <p className="guide-item-body">
+                {bond.role}。{bond.trigger}によって変化しやすく、{bond.recovery}
               </p>
             </div>
           ))}
-        </div>
-      </section>
+        </section>
 
-      <section className="page-section" id="misconceptions">
-        <p className="section-label">Q&A</p>
-        <h2 className="section-title">よくある誤解</h2>
-        <div className="mt-3 space-y-2">
-          {misconceptions.map((item) => (
-            <details key={item.q} className="faq-item">
-              <summary>{item.q}</summary>
-              <p>{item.a}</p>
-            </details>
+        <section className="guide-chapter" id="moisture-ph">
+          <p className="guide-chapter-num">第3章</p>
+          <h2 className="guide-chapter-title">水分とpH</h2>
+          <div className="guide-prose">
+            <p>{moisturePh.moisture}</p>
+            <p>{moisturePh.ph}</p>
+            <p>{moisturePh.aftercare}</p>
+          </div>
+        </section>
+
+        <section className="guide-chapter" id="functional-blocks">
+          <p className="guide-chapter-num">第4章</p>
+          <h2 className="guide-chapter-title">アフターブレイクの機能構造</h2>
+          <p className="guide-chapter-intro">
+            この製品は、残留物の性質ごとに成分を割り当てた「機能構造」で設計されています。
+            機械のような物理構造ではなく、化学的な後処理と、洗い心地の配慮が組み合わさった処方です。
+          </p>
+          {functionalBlocks.map((block) => (
+            <div key={block.block} className="guide-item">
+              <h3 className="guide-item-title">{block.block}</h3>
+              <p className="guide-item-meta">
+                対象：{block.target}　／　{block.ingredients}
+              </p>
+              <p className="guide-item-body">{block.simple}</p>
+              <p className="guide-item-meta">（{block.note}）</p>
+            </div>
           ))}
-        </div>
-      </section>
+        </section>
 
-      <section className="page-section" id="practice">
-        <p className="section-label">PRACTICE</p>
-        <h2 className="section-title">練習問題</h2>
-        <p className="mt-1 text-[11px] text-muted">答えを見る前に、自分の言葉で説明してみましょう。</p>
-        <div className="mt-3 space-y-2">
-          {practiceQuestions.map((q, i) => (
-            <details key={q.id} className="card-soft p-0 overflow-hidden">
-              <summary className="cursor-pointer px-4 py-3.5 text-[13px] font-semibold text-foreground">
-                問題{i + 1}：{q.question}
-              </summary>
-              <div className="border-t border-border-subtle bg-primary-muted/20 px-4 py-3">
-                <p className="text-[10px] font-bold text-primary">模範解答の方向性</p>
-                <p className="mt-1.5 text-[12px] leading-relaxed text-foreground">{q.hint}</p>
+        <section className="guide-chapter" id="process-flow">
+          <p className="guide-chapter-num">第5章</p>
+          <h2 className="guide-chapter-title">施術後の流れ</h2>
+          <p className="guide-chapter-intro">
+            カラーやパーマのあとに何が残り、それぞれをどう処理するのかを、一本の流れで整理します。
+          </p>
+          <figure className="guide-figure p-3">
+            <AfterBreakFlowDiagram />
+          </figure>
+        </section>
+
+        <section className="guide-chapter" id="residue">
+          <p className="guide-chapter-num">第6章</p>
+          <h2 className="guide-chapter-title">残留物と毛髪理論の接点</h2>
+          <p className="guide-chapter-intro">
+            残留、pHの立て直し、酸化の後始末、摩擦の低減——この四つが、アフターブレイクを理解するうえでの軸になります。
+          </p>
+          <div className="guide-faq">
+            {residueConnections.map((row) => (
+              <details key={row.factor}>
+                <summary>{row.factor}</summary>
+                <p>
+                  主に{row.area}に関わり、{row.effect}。
+                  アフターブレイクでは{row.response}。
+                  ただし、{row.limit}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="guide-chapter" id="color-vs-perm">
+          <p className="guide-chapter-num">第7章</p>
+          <h2 className="guide-chapter-title">カラーとパーマの違い</h2>
+          <p className="guide-chapter-intro">
+            どちらも表面と内部の両方に影響しますが、目立ちやすい負担の場所は少し異なります。
+            カラーは外壁が荒れやすく、パーマは本体の結び目が変わりやすい——この整理で大きく外しません。
+          </p>
+          {colorVsPerm.map((row) => (
+            <div key={row.label} className="guide-compare-row">
+              <p className="guide-compare-label">{row.label}</p>
+              <div className="guide-compare-cols">
+                <div className="guide-compare-col">
+                  <span>ヘアカラー</span>
+                  {row.color}
+                </div>
+                <div className="guide-compare-col">
+                  <span>パーマ</span>
+                  {row.perm}
+                </div>
               </div>
-            </details>
+              <p className="guide-compare-foot">アフターブレイクの位置づけ：{row.afterBreak}</p>
+            </div>
           ))}
-        </div>
-      </section>
+        </section>
 
-      <section className="page-section">
-        <p className="section-label">COMPLIANCE</p>
-        <h2 className="section-title">表現上の注意</h2>
-        <ul className="compliance-note mt-3 space-y-2.5">
-          <li className="flex gap-2.5">
-            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-white">✓</span>
-            <span>「髪を再生する」「S-S結合を修復する」などの断定表現は使わない</span>
-          </li>
-          <li className="flex gap-2.5">
-            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-white">✓</span>
-            <span>「残留物の処理」「後ダメージの抑制」「使用感の改善」という枠組みで説明する</span>
-          </li>
-          <li className="flex gap-2.5">
-            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-white">✓</span>
-            <span>公式に書かれていない試験データや濃度は、推測で補わない</span>
-          </li>
-        </ul>
-      </section>
+        <section className="guide-chapter" id="misconceptions">
+          <p className="guide-chapter-num">第8章</p>
+          <h2 className="guide-chapter-title">よくある誤解</h2>
+          <div className="guide-faq">
+            {misconceptions.map((item) => (
+              <details key={item.q}>
+                <summary>{item.q}</summary>
+                <p>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section className="page-section pb-8 space-y-3">
-        <Link href="/products/oxlon-after-break" className="btn-primary">
-          OXLON After Break 製品ページ
-        </Link>
-        <Link href="/learn/treatment-aftercare" className="btn-secondary">
-          関連Mission：施術後ケア
-        </Link>
-        <Link href="/learn/ewr-products" className="btn-secondary">
-          関連Mission：EW-R製品
-        </Link>
-        <Link href="/glossary" className="btn-ghost flex w-full justify-center py-2">
-          用語集で復習する →
-        </Link>
-      </section>
+        <section className="guide-chapter" id="practice">
+          <p className="guide-chapter-num">第9章</p>
+          <h2 className="guide-chapter-title">確認してみる</h2>
+          <p className="guide-chapter-intro">
+            読み終えたら、自分の言葉で説明できるか確かめてみてください。
+          </p>
+          <div className="guide-practice">
+            {practiceQuestions.map((q, i) => (
+              <details key={q.id}>
+                <summary>問{i + 1}　{q.question}</summary>
+                <p className="guide-practice-answer">{q.hint}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="guide-chapter">
+          <p className="guide-chapter-num">おわりに</p>
+          <h2 className="guide-chapter-title">説明するときの注意</h2>
+          <div className="guide-prose">
+            <p>
+              「髪を再生する」「S-S結合を修復する」といった断定表現は使わないでください。
+              残留物の処理、後ダメージの抑制、使用感の改善——この枠組みでお伝えするのが適切です。
+            </p>
+            <p>
+              公式に記載のない試験データや濃度を、推測で補うことも避けてください。
+              書かれていることと、学術的に確実なことは、きちんと分けて説明しましょう。
+            </p>
+          </div>
+        </section>
+
+        <footer className="guide-footer-links space-y-3">
+          <Link href="/products/oxlon-after-break" className="btn-primary">
+            OXLON After Break の製品情報
+          </Link>
+          <Link href="/learn/treatment-aftercare" className="btn-secondary">
+            施術後ケアのMissionへ
+          </Link>
+          <Link href="/learn/ewr-products" className="btn-secondary">
+            EW-R製品のMissionへ
+          </Link>
+          <Link href="/glossary" className="btn-ghost flex w-full justify-center py-2">
+            用語集を見る
+          </Link>
+        </footer>
+      </article>
     </AppShell>
   );
 }

@@ -136,18 +136,12 @@ export default function LearnPage() {
       </section>
 
       <section className="page-section">
-        <Link href="/learn/after-break" className="card-premium card-interactive block p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="section-label">STUDY GUIDE</p>
-              <p className="text-[14px] font-bold text-foreground">アフターブレイクを構造的に理解する</p>
-              <p className="mt-1 text-[11px] leading-relaxed text-muted">
-                毛髪理論 × 機能構造。段階的に学べるガイド。
-              </p>
-            </div>
-            <span className="badge-gold shrink-0">New</span>
-          </div>
-          <p className="btn-ghost mt-3 text-[11px]">学習ページを開く →</p>
+        <Link href="/learn/after-break" className="card-soft card-interactive block p-4">
+          <p className="text-[15px] font-bold leading-snug text-foreground">アフターブレイクを構造的に理解する</p>
+          <p className="mt-2 text-[13px] leading-[1.9] text-muted">
+            毛髪の構造から施術後の残留物、製品の役割まで順を追って読める学習ページです。
+          </p>
+          <p className="mt-3 text-[13px] font-medium text-primary">読む →</p>
         </Link>
       </section>
 
