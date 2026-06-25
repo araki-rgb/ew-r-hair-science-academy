@@ -48,6 +48,19 @@ export default async function ProductDetailPage({
         <DiagramArea diagram={diagram} size="hero" />
       </section>
 
+      {slug === "oxlon-after-break" && (
+        <section className="page-section">
+          <Link href="/learn/after-break" className="card-premium card-interactive block p-5">
+            <p className="section-label">STUDY GUIDE</p>
+            <h2 className="section-title">毛髪理論で読み解く</h2>
+            <p className="mt-2 text-[12px] leading-relaxed text-muted">
+              三層構造・4つの結合・機能ブロックまで、高校生でもわかるレベルで段階的に学べます。
+            </p>
+            <p className="btn-ghost mt-3 text-[11px]">学習ページを開く →</p>
+          </Link>
+        </section>
+      )}
+
       <section className="page-section">
         <div className="card-premium p-4">
           <p className="section-label">FEATURES</p>

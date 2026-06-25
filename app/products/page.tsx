@@ -24,7 +24,7 @@ export default function ProductsPage() {
         description="OXLONラインの特徴・提案シーン・営業トークを整理。「売る」ではなく「理解して提案する」ための教材です。"
       />
 
-      <section className="page-section pt-0">
+      <section className="page-section pt-0 space-y-2">
         <Link href="/products/compare" className="card-premium card-interactive flex items-center gap-4 p-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gold-muted text-gold">
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
@@ -38,6 +38,13 @@ export default function ProductsPage() {
           <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0 text-primary">
             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
           </svg>
+        </Link>
+        <Link href="/learn/after-break" className="card-soft card-interactive flex items-center justify-between p-4">
+          <div>
+            <p className="text-[13px] font-bold text-foreground">After Break 学習ガイド</p>
+            <p className="mt-0.5 text-[10px] text-muted">毛髪理論で構造的に理解する</p>
+          </div>
+          <span className="badge-gold">Study</span>
         </Link>
       </section>
 
