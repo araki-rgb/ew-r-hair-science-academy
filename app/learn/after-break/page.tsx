@@ -24,7 +24,7 @@ export default function AfterBreakGuidePage() {
         backLabel="Mission"
         label="STUDY GUIDE"
         title="アフターブレイクを構造的に理解する"
-        description="高校生でもわかるレベルで、毛髪理論と製品の機能構造を段階的に学べます。"
+        description="毛髪理論と製品の機能構造を、段階的に学べます。"
         badge="基礎"
       />
 

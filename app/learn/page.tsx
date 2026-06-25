@@ -142,7 +142,7 @@ export default function LearnPage() {
               <p className="section-label">STUDY GUIDE</p>
               <p className="text-[14px] font-bold text-foreground">アフターブレイクを構造的に理解する</p>
               <p className="mt-1 text-[11px] leading-relaxed text-muted">
-                毛髪理論 × 機能構造。高校生向けの段階的ガイド。
+                毛髪理論 × 機能構造。段階的に学べるガイド。
               </p>
             </div>
             <span className="badge-gold shrink-0">New</span>
